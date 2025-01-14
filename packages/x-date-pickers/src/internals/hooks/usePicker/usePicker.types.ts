@@ -48,7 +48,7 @@ export interface UsePickerParams<
     >,
     Pick<
       UsePickerViewParams<TValue, TView, TExternalProps>,
-      'autoFocusView' | 'rendererInterceptor' | 'fieldRef'
+      'autoFocusView' | 'rendererInterceptor'
     >,
     Pick<
       UsePickerProviderParameters<TValue, TView, InferError<TExternalProps>>,

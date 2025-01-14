@@ -88,7 +88,6 @@ export interface UsePickerViewParams<
   props: TExternalProps;
   propsFromPickerValue: UsePickerValueViewsResponse<TValue>;
   autoFocusView: boolean;
-  fieldRef?: React.RefObject<FieldRef<PickerValue> | FieldRef<PickerRangeValue> | null>;
   /**
    * A function that intercepts the regular picker rendering.
    * Can be used to consume the provided `viewRenderers` and render a custom component wrapping them.
@@ -137,6 +136,14 @@ export interface UsePickerViewsContextValue<TView extends DateOrTimeViewWithMeri
    * View currently rendered.
    */
   view: TView | null;
+  /**
+   * The view showed when first opening the picker.
+   */
+  initialView: TView | null;
+}
+
+export interface UsePickerViewsFieldPrivateContextValue {
+  internalFieldRef: React.RefObject<FieldRef<PickerValue> | FieldRef<PickerRangeValue> | null>;
 }
 
 export interface UsePickerViewsProviderParams<TView extends DateOrTimeViewWithMeridiem> {
@@ -144,6 +151,7 @@ export interface UsePickerViewsProviderParams<TView extends DateOrTimeViewWithMe
   views: readonly TView[];
   contextValue: UsePickerViewsContextValue<TView>;
   actionsContextValue: UsePickerViewsActionsContextValue<TView>;
+  fieldPrivateContextValue: UsePickerViewsFieldPrivateContextValue;
 }
 
 /**
@@ -161,11 +169,11 @@ export const usePickerViews = <
   propsFromPickerValue,
   autoFocusView,
   rendererInterceptor: RendererInterceptor,
-  fieldRef,
 }: UsePickerViewParams<TValue, TView, TExternalProps>): UsePickerViewsResponse<TView> => {
   const { onChange, value, open, setOpen } = propsFromPickerValue;
   const { view: inView, views, openTo, onViewChange, viewRenderers, timezone } = props;
   const { className, sx, ...propsToForwardToView } = props;
+  const fieldRef = React.useRef<FieldRef<PickerValue> | FieldRef<PickerRangeValue> | null>(null);
 
   const { view, setView, defaultView, focusedView, setFocusedView, setValueAndGoToNextView } =
     useViews({
@@ -266,13 +274,20 @@ export const usePickerViews = <
     [setView],
   );
 
+  const initialViewRef = React.useRef<TView | null>(openTo ?? null);
   const contextValue = React.useMemo<UsePickerViewsContextValue<TView>>(
     () => ({
       ...actionsContextValue,
       views,
       view: popperView,
+      initialView: initialViewRef.current,
     }),
     [actionsContextValue, views, popperView],
+  );
+
+  const fieldPrivateContextValue = React.useMemo<UsePickerViewsFieldPrivateContextValue>(
+    () => ({ internalFieldRef: fieldRef }),
+    [],
   );
 
   const providerParams: UsePickerViewsProviderParams<TView> = {
@@ -280,6 +295,7 @@ export const usePickerViews = <
     views,
     contextValue,
     actionsContextValue,
+    fieldPrivateContextValue,
   };
 
   return {

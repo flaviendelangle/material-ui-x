@@ -9,7 +9,6 @@ import {
   PickersPopper,
   DateOrTimeViewWithMeridiem,
   PickerProvider,
-  PickerValue,
   PickerRangeValue,
   PickerFieldUIContextProvider,
 } from '@mui/x-date-pickers/internals';
@@ -60,8 +59,6 @@ export const useDesktopRangePicker = <
 
   const fieldContainerRef = React.useRef<HTMLDivElement>(null);
   const popperRef = React.useRef<HTMLDivElement>(null);
-  const startFieldRef = React.useRef<FieldRef<PickerValue>>(null);
-  const endFieldRef = React.useRef<FieldRef<PickerValue>>(null);
   const singleInputFieldRef = React.useRef<FieldRef<PickerRangeValue>>(null);
   const initialView = React.useRef<TView | null>(props.openTo ?? null);
 
@@ -70,15 +67,6 @@ export const useDesktopRangePicker = <
     props,
     fieldType === 'single-input' ? singleInputFieldRef : undefined,
   );
-
-  let fieldRef: React.RefObject<FieldRef<PickerValue> | FieldRef<PickerRangeValue> | null>;
-  if (fieldType === 'single-input') {
-    fieldRef = singleInputFieldRef;
-  } else if (rangePositionResponse.rangePosition === 'start') {
-    fieldRef = startFieldRef;
-  } else {
-    fieldRef = endFieldRef;
-  }
 
   const { providerProps, renderCurrentView, shouldRestoreFocus, ownerState } = usePicker<
     PickerRangeValue,
@@ -89,7 +77,6 @@ export const useDesktopRangePicker = <
     props,
     variant: 'desktop',
     autoFocusView: false,
-    fieldRef,
     localeText,
   });
 
@@ -154,15 +141,10 @@ export const useDesktopRangePicker = <
     readOnly,
     disableOpenPicker,
     label,
-    localeText,
     onBlur: handleBlur,
     pickerSlotProps: slotProps,
     pickerSlots: slots,
     fieldProps,
-    anchorRef: providerProps.contextValue.triggerRef,
-    startFieldRef,
-    endFieldRef,
-    singleInputFieldRef,
     currentView:
       providerProps.contextValue.view !== props.openTo
         ? providerProps.contextValue.view

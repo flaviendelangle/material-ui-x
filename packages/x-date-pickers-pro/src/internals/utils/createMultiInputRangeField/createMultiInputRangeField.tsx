@@ -7,7 +7,16 @@ import Typography from '@mui/material/Typography';
 import { styled, useThemeProps } from '@mui/material/styles';
 import composeClasses from '@mui/utils/composeClasses';
 import useSlotProps from '@mui/utils/useSlotProps';
-import { cleanFieldResponse, useFieldOwnerState } from '@mui/x-date-pickers/internals';
+import useForkRef from '@mui/utils/useForkRef';
+import useEventCallback from '@mui/utils/useEventCallback';
+import {
+  cleanFieldResponse,
+  executeInTheNextEventLoopTick,
+  getActiveElement,
+  useFieldOwnerState,
+  useNullablePickerContext,
+  usePickerPrivateContext,
+} from '@mui/x-date-pickers/internals';
 import { useSplitFieldProps } from '@mui/x-date-pickers/hooks';
 import { PickersTextField } from '@mui/x-date-pickers/PickersTextField';
 import {
@@ -53,8 +62,11 @@ export function createMultiInputRangeField<TManager extends PickerAnyRangeManage
 
   const MultiInputRangeField = React.forwardRef(function MultiInputRangeField(
     props: MultiInputRangeFieldProps<TManager>,
-    ref: React.Ref<HTMLDivElement>,
+    forwardedRef: React.ForwardedRef<HTMLDivElement>,
   ) {
+    const ref = React.useRef<HTMLDivElement>(null);
+    const handleRef = useForkRef(ref, forwardedRef);
+
     const themeProps = useThemeProps({
       props,
       // eslint-disable-next-line material-ui/mui-name-matches-component-name
@@ -75,8 +87,27 @@ export function createMultiInputRangeField<TManager extends PickerAnyRangeManage
       ...otherForwardedProps
     } = forwardedProps;
 
+    const pickerContext = useNullablePickerContext();
+    const privatePickerContext = usePickerPrivateContext();
     const classes = useUtilityClasses(classesProp);
     const ownerState = useFieldOwnerState(internalProps as any);
+
+    const handleBlur = useEventCallback(() => {
+      if (!pickerContext || pickerContext.variant === 'mobile') {
+        return;
+      }
+
+      executeInTheNextEventLoopTick(() => {
+        if (
+          ref.current?.contains(getActiveElement(document)) ||
+          popperRef.current?.contains(getActiveElement(document))
+        ) {
+          return;
+        }
+
+        privatePickerContext.dismissViews();
+      });
+    });
 
     const Root = slots?.root ?? MultiInputRangeFieldRoot;
     const rootProps = useSlotProps({
@@ -84,7 +115,8 @@ export function createMultiInputRangeField<TManager extends PickerAnyRangeManage
       externalSlotProps: slotProps?.root,
       externalForwardedProps: otherForwardedProps,
       additionalProps: {
-        ref,
+        ref: handleRef,
+        onBlur: handleBlur,
       },
       ownerState,
       className: clsx(className, classes.root),

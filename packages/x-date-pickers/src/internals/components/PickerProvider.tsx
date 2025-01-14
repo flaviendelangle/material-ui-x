@@ -21,7 +21,7 @@ import { IsValidValueContext } from '../../hooks/useIsValidValue';
 import {
   PickerFieldPrivateContext,
   PickerFieldPrivateContextValue,
-} from '../hooks/useField/useFieldInternalPropsWithDefaults';
+} from '../hooks/useNullableFieldPrivateContext';
 import { PickerContext } from '../../hooks/usePickerContext';
 
 export const PickerActionsContext = React.createContext<PickerActionsContextValue<

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { FieldChangeHandler, UseFieldInternalProps } from './useField.types';
+import type { FieldChangeHandler } from './useField.types';
 import {
   PickerAnyManager,
   PickerManagerError,
@@ -9,10 +9,7 @@ import {
 } from '../../models';
 import { useLocalizationContext } from '../useUtils';
 import { useNullablePickerContext } from '../useNullablePickerContext';
-
-export const PickerFieldPrivateContext = React.createContext<PickerFieldPrivateContextValue | null>(
-  null,
-);
+import { useNullableFieldPrivateContext } from '../useNullableFieldPrivateContext';
 
 /**
  * Applies the default values to the field internal props.
@@ -28,7 +25,7 @@ export function useFieldInternalPropsWithDefaults<TManager extends PickerAnyMana
 }): PickerManagerFieldInternalPropsWithDefaults<TManager> {
   const localizationContext = useLocalizationContext();
   const pickerContext = useNullablePickerContext();
-  const fieldPrivateContext = React.useContext(PickerFieldPrivateContext);
+  const fieldPrivateContext = useNullableFieldPrivateContext();
 
   const setValue = pickerContext?.setValue;
   const handleChangeFromPicker: FieldChangeHandler<
@@ -75,12 +72,3 @@ export function useFieldInternalPropsWithDefaults<TManager extends PickerAnyMana
     handleChangeFromPicker,
   ]);
 }
-
-export interface PickerFieldPrivateContextValue
-  extends Pick<
-    UseFieldInternalProps<any, any, any>,
-    | 'formatDensity'
-    | 'enableAccessibleFieldDOMStructure'
-    | 'selectedSections'
-    | 'onSelectedSectionsChange'
-  > {}

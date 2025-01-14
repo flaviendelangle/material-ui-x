@@ -17,7 +17,6 @@ export const usePicker = <
   validator,
   autoFocusView,
   rendererInterceptor,
-  fieldRef,
   localeText,
 }: UsePickerParams<TValue, TView, TExternalProps>): UsePickerResponse<TValue, TView> => {
   if (process.env.NODE_ENV !== 'production') {
@@ -39,7 +38,6 @@ export const usePicker = <
   const pickerViewsResponse = usePickerViews<TValue, TView, TExternalProps>({
     props,
     autoFocusView,
-    fieldRef,
     propsFromPickerValue: pickerValueResponse.viewProps,
     rendererInterceptor,
   });

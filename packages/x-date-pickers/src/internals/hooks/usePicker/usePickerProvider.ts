@@ -6,6 +6,7 @@ import {
   PickerProviderProps,
   PickerContextValue,
   PickerPrivateContextValue,
+  PickerActionsContextValue,
 } from '../../components/PickerProvider';
 import type { UsePickerProps } from './usePicker.types';
 import {
@@ -18,7 +19,7 @@ import {
 import { useUtils } from '../useUtils';
 import { arrayIncludes } from '../../utils/utils';
 import { UsePickerViewsProviderParams } from './usePickerViews';
-import { PickerFieldPrivateContextValue } from '../useField/useFieldInternalPropsWithDefaults';
+import { PickerFieldPrivateContextValue } from '../useNullableFieldPrivateContext';
 
 function getOrientation(): PickerOrientation {
   if (typeof window === 'undefined') {
@@ -148,7 +149,7 @@ export function usePickerProvider<
     [paramsFromUsePickerValue, ownerState],
   );
 
-  const actionsContextValue = React.useMemo(
+  const actionsContextValue = React.useMemo<PickerActionsContextValue<TValue, TView, TError>>(
     () => ({
       ...paramsFromUsePickerValue.actionsContextValue,
       ...paramsFromUsePickerViews.actionsContextValue,
@@ -156,14 +157,16 @@ export function usePickerProvider<
     [paramsFromUsePickerValue.actionsContextValue, paramsFromUsePickerViews.actionsContextValue],
   );
 
-  const fieldPrivateContextValue = React.useMemo(
+  const fieldPrivateContextValue = React.useMemo<PickerFieldPrivateContextValue>(
     () => ({
+      ...paramsFromUsePickerViews.fieldPrivateContextValue,
       formatDensity: props.formatDensity,
       enableAccessibleFieldDOMStructure: props.enableAccessibleFieldDOMStructure,
       selectedSections: props.selectedSections,
       onSelectedSectionsChange: props.onSelectedSectionsChange,
     }),
     [
+      paramsFromUsePickerViews.fieldPrivateContextValue,
       props.formatDensity,
       props.enableAccessibleFieldDOMStructure,
       props.selectedSections,
