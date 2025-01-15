@@ -9,6 +9,7 @@ import {
   PickerValue,
   useControlledValueWithTimezone,
   useFieldInternalPropsWithDefaults,
+  UseFieldResponse,
 } from '@mui/x-date-pickers/internals';
 import { useValidation } from '@mui/x-date-pickers/validation';
 import { useMultiInputRangeFieldTextFieldProps } from './useMultiInputRangeFieldTextFieldProps';
@@ -49,7 +50,7 @@ import { PickerAnyRangeManager } from '../../internals/models/managers';
  * @param {PickerManagerFieldInternalProps<TManager>} parameters.internalProps The internal props of the field.
  * @param {TForwardedProps} parameters.startForwardedProps The forwarded props of the start field.
  * @param {TForwardedProps} parameters.endForwardedProps The forwarded props of the end field.
- * @returns {{ startDate: Omit<UseFieldResponse<TEnableAccessibleFieldDOMStructure, TForwardedProps>, 'clearable' | 'onClear'>, endDate: Omit<UseFieldResponse<TEnableAccessibleFieldDOMStructure, TForwardedProps>, 'clearable' | 'onClear'> }} The props to pass to the start and the end components.
+ * @returns {UseMultiInputRangeFieldReturnValue<TManager, TForwardedProps>} The props to pass to the start and the end components.
  */
 export function useMultiInputRangeField<
   TManager extends PickerAnyRangeManager,
@@ -177,4 +178,19 @@ interface UseMultiInputRangeFieldParameters<
   internalProps: PickerManagerFieldInternalProps<TManager>;
   startForwardedProps: TForwardedProps;
   endForwardedProps: TForwardedProps;
+}
+
+interface UseMultiInputRangeFieldReturnValue<
+  TManager extends PickerAnyRangeManager,
+  TForwardedProps extends {},
+> {
+  startDate: Omit<
+    UseFieldResponse<PickerManagerEnableAccessibleFieldDOMStructure<TManager>, TForwardedProps>,
+    'clearable' | 'onClear'
+  >;
+  endDate: Omit<
+    UseFieldResponse<PickerManagerEnableAccessibleFieldDOMStructure<TManager>, TForwardedProps>,
+    'clearable' | 'onClear'
+  >;
+  enableAccessibleFieldDOMStructure: PickerManagerEnableAccessibleFieldDOMStructure<TManager>;
 }
