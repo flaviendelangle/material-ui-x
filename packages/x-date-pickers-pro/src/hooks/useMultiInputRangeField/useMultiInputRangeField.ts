@@ -1,8 +1,10 @@
 'use client';
+import useForkRef from '@mui/utils/useForkRef';
 import useEventCallback from '@mui/utils/useEventCallback';
 import {
   FieldChangeHandler,
   FieldChangeHandlerContext,
+  PickerManagerEnableAccessibleFieldDOMStructure,
   PickerManagerError,
   PickerManagerFieldInternalProps,
   PickerRangeValue,
@@ -10,11 +12,13 @@ import {
   useControlledValueWithTimezone,
   useFieldInternalPropsWithDefaults,
   UseFieldResponse,
+  useNullableFieldPrivateContext,
 } from '@mui/x-date-pickers/internals';
 import { useValidation } from '@mui/x-date-pickers/validation';
 import { useMultiInputRangeFieldTextFieldProps } from './useMultiInputRangeFieldTextFieldProps';
 import { useMultiInputRangeFieldSelectedSections } from './useMultiInputRangeFieldSelectedSections';
 import { PickerAnyRangeManager } from '../../internals/models/managers';
+import { useNullablePickerRangePositionContext } from '@mui/x-date-pickers-pro/internals/hooks/useNullablePickerRangePositionContext';
 
 /**
  * Basic example:
@@ -84,6 +88,17 @@ export function useMultiInputRangeField<
     unstableEndFieldRef,
   } = internalPropsWithDefaults;
 
+  const rangePositionContext = useNullablePickerRangePositionContext();
+  const fieldPrivateContext = useNullableFieldPrivateContext();
+  const handleStartFieldRef = useForkRef(
+    unstableStartFieldRef,
+    rangePositionContext?.rangePosition === 'start' ? fieldPrivateContext?.internalFieldRef : null,
+  );
+  const handleEndFieldRef = useForkRef(
+    unstableEndFieldRef,
+    rangePositionContext?.rangePosition === 'end' ? fieldPrivateContext?.internalFieldRef : null,
+  );
+
   const { value, handleValueChange, timezone } = useControlledValueWithTimezone({
     name: 'useMultiInputRangeField',
     timezone: timezoneProp,
@@ -122,8 +137,8 @@ export function useMultiInputRangeField<
   const selectedSectionsResponse = useMultiInputRangeFieldSelectedSections({
     selectedSections,
     onSelectedSectionsChange,
-    unstableStartFieldRef,
-    unstableEndFieldRef,
+    unstableStartFieldRef: handleStartFieldRef,
+    unstableEndFieldRef: handleEndFieldRef,
   });
 
   const sharedProps = {

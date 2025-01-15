@@ -149,7 +149,6 @@ export const useDesktopRangePicker = <
       providerProps.contextValue.view !== props.openTo
         ? providerProps.contextValue.view
         : undefined,
-    initialView: initialView.current ?? undefined,
     ...rangePositionResponse,
   });
 
