@@ -81,6 +81,7 @@ export function usePickerProvider<
   const utils = useUtils();
   const orientation = usePickerOrientation(paramsFromUsePickerViews.views, props.orientation);
   const triggerRef = React.useRef<HTMLElement>(null);
+  const popupRef = React.useRef<HTMLElement>(null);
 
   const ownerState = React.useMemo<PickerOwnerState>(
     () => ({
@@ -130,6 +131,7 @@ export function usePickerProvider<
       triggerRef,
       triggerStatus,
       fieldFormat: props.format ?? '',
+      popupRef,
     }),
     [
       paramsFromUsePickerValue.contextValue,

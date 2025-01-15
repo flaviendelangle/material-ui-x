@@ -3,8 +3,6 @@ import useSlotProps from '@mui/utils/useSlotProps';
 import { useLicenseVerifier } from '@mui/x-license';
 import { PickersLayout } from '@mui/x-date-pickers/PickersLayout';
 import {
-  executeInTheNextEventLoopTick,
-  getActiveElement,
   usePicker,
   PickersPopper,
   DateOrTimeViewWithMeridiem,
@@ -58,7 +56,6 @@ export const useDesktopRangePicker = <
   } = props;
 
   const fieldContainerRef = React.useRef<HTMLDivElement>(null);
-  const popperRef = React.useRef<HTMLDivElement>(null);
   const singleInputFieldRef = React.useRef<FieldRef<PickerRangeValue>>(null);
   const initialView = React.useRef<TView | null>(props.openTo ?? null);
 
@@ -89,20 +86,6 @@ export const useDesktopRangePicker = <
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const handleBlur = () => {
-    executeInTheNextEventLoopTick(() => {
-      if (
-        fieldContainerRef.current?.contains(getActiveElement(document)) ||
-        popperRef.current?.contains(getActiveElement(document))
-      ) {
-        return;
-      }
-
-      // This direct access to `providerProps` will go away once the range fields stop having their views in a tooltip.
-      providerProps.privateContextValue.dismissViews();
-    });
-  };
 
   const Field = slots.field;
 
@@ -141,7 +124,6 @@ export const useDesktopRangePicker = <
     readOnly,
     disableOpenPicker,
     label,
-    onBlur: handleBlur,
     pickerSlotProps: slotProps,
     pickerSlots: slots,
     fieldProps,
@@ -169,7 +151,6 @@ export const useDesktopRangePicker = <
           <PickersPopper
             role="tooltip"
             placement="bottom-start"
-            containerRef={popperRef}
             anchorEl={providerProps.contextValue.triggerRef.current}
             onBlur={handleBlur}
             slots={slots}

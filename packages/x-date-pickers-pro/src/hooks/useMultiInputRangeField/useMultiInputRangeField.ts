@@ -1,5 +1,4 @@
 'use client';
-import useForkRef from '@mui/utils/useForkRef';
 import useEventCallback from '@mui/utils/useEventCallback';
 import {
   FieldChangeHandler,
@@ -12,13 +11,15 @@ import {
   useControlledValueWithTimezone,
   useFieldInternalPropsWithDefaults,
   UseFieldResponse,
-  useNullableFieldPrivateContext,
 } from '@mui/x-date-pickers/internals';
 import { useValidation } from '@mui/x-date-pickers/validation';
 import { useMultiInputRangeFieldTextFieldProps } from './useMultiInputRangeFieldTextFieldProps';
 import { useMultiInputRangeFieldSelectedSections } from './useMultiInputRangeFieldSelectedSections';
 import { PickerAnyRangeManager } from '../../internals/models/managers';
-import { useNullablePickerRangePositionContext } from '@mui/x-date-pickers-pro/internals/hooks/useNullablePickerRangePositionContext';
+import {
+  useMultiInputRangeFieldRootProps,
+  UseMultiInputRangeFieldRootPropsReturnValue,
+} from './useMultiInputRangeFieldRootProps';
 
 /**
  * Basic example:
@@ -49,20 +50,23 @@ import { useNullablePickerRangePositionContext } from '@mui/x-date-pickers-pro/i
  * }
  * ```
  *
- * @param {UseMultiInputRangeFieldParameters<TManager, TForwardedProps>} parameters The parameters of the hook.
+ * @param {UseMultiInputRangeFieldParameters<TManager, TTextFieldProps>} parameters The parameters of the hook.
  * @param {TManager} parameters.manager The manager of the field.
  * @param {PickerManagerFieldInternalProps<TManager>} parameters.internalProps The internal props of the field.
- * @param {TForwardedProps} parameters.startForwardedProps The forwarded props of the start field.
- * @param {TForwardedProps} parameters.endForwardedProps The forwarded props of the end field.
- * @returns {UseMultiInputRangeFieldReturnValue<TManager, TForwardedProps>} The props to pass to the start and the end components.
+ * @param {TTextFieldProps} parameters.startForwardedProps The forwarded props of the start field.
+ * @param {TTextFieldProps} parameters.endForwardedProps The forwarded props of the end field.
+ * @returns {UseMultiInputRangeFieldReturnValue<TManager, TTextFieldProps>} The props to pass to the start and the end components.
  */
 export function useMultiInputRangeField<
   TManager extends PickerAnyRangeManager,
-  TForwardedProps extends { [key: string]: any },
->(parameters: UseMultiInputRangeFieldParameters<TManager, TForwardedProps>) {
+  TTextFieldProps extends { [key: string]: any },
+  TRootProps extends { [key: string]: any },
+>(
+  parameters: UseMultiInputRangeFieldParameters<TManager, TTextFieldProps, TRootProps>,
+): UseMultiInputRangeFieldReturnValue<TManager, TTextFieldProps, TRootProps> {
   type TError = PickerManagerError<TManager>;
 
-  const { manager, internalProps, startForwardedProps, endForwardedProps } = parameters;
+  const { manager, internalProps, rootProps, startTextFieldProps, endTextFieldProps } = parameters;
 
   const internalPropsWithDefaults = useFieldInternalPropsWithDefaults({
     manager,
@@ -87,17 +91,6 @@ export function useMultiInputRangeField<
     unstableStartFieldRef,
     unstableEndFieldRef,
   } = internalPropsWithDefaults;
-
-  const rangePositionContext = useNullablePickerRangePositionContext();
-  const fieldPrivateContext = useNullableFieldPrivateContext();
-  const handleStartFieldRef = useForkRef(
-    unstableStartFieldRef,
-    rangePositionContext?.rangePosition === 'start' ? fieldPrivateContext?.internalFieldRef : null,
-  );
-  const handleEndFieldRef = useForkRef(
-    unstableEndFieldRef,
-    rangePositionContext?.rangePosition === 'end' ? fieldPrivateContext?.internalFieldRef : null,
-  );
 
   const { value, handleValueChange, timezone } = useControlledValueWithTimezone({
     name: 'useMultiInputRangeField',
@@ -137,8 +130,8 @@ export function useMultiInputRangeField<
   const selectedSectionsResponse = useMultiInputRangeFieldSelectedSections({
     selectedSections,
     onSelectedSectionsChange,
-    unstableStartFieldRef: handleStartFieldRef,
-    unstableEndFieldRef: handleEndFieldRef,
+    unstableStartFieldRef,
+    unstableEndFieldRef,
   });
 
   const sharedProps = {
@@ -151,11 +144,14 @@ export function useMultiInputRangeField<
     enableAccessibleFieldDOMStructure,
   };
 
-  const startDateProps = useMultiInputRangeFieldTextFieldProps<TManager, TForwardedProps>({
+  const rootResponse = useMultiInputRangeFieldRootProps(rootProps);
+
+  const startTextFieldResponse = useMultiInputRangeFieldTextFieldProps<TManager, TTextFieldProps>({
     valueType: manager.valueType,
+    position: 'start',
     fieldProps: {
       error: !!validationError[0],
-      ...startForwardedProps,
+      ...startTextFieldProps,
       ...selectedSectionsResponse.start,
       ...sharedProps,
       value: valueProp === undefined ? undefined : valueProp[0],
@@ -165,11 +161,12 @@ export function useMultiInputRangeField<
     },
   });
 
-  const endDateProps = useMultiInputRangeFieldTextFieldProps<TManager, TForwardedProps>({
+  const endTextFieldResponse = useMultiInputRangeFieldTextFieldProps<TManager, TTextFieldProps>({
     valueType: manager.valueType,
+    position: 'end',
     fieldProps: {
       error: !!validationError[1],
-      ...endForwardedProps,
+      ...endTextFieldProps,
       ...selectedSectionsResponse.end,
       ...sharedProps,
       value: valueProp === undefined ? undefined : valueProp[1],
@@ -179,32 +176,37 @@ export function useMultiInputRangeField<
   });
 
   return {
-    startDate: startDateProps,
-    endDate: endDateProps,
+    root: rootResponse,
+    startTextField: startTextFieldResponse,
+    endTextField: endTextFieldResponse,
     enableAccessibleFieldDOMStructure,
   };
 }
 
 interface UseMultiInputRangeFieldParameters<
   TManager extends PickerAnyRangeManager,
-  TForwardedProps extends {},
+  TTextFieldProps extends { [key: string]: any },
+  TRootProps extends { [key: string]: any },
 > {
   manager: TManager;
   internalProps: PickerManagerFieldInternalProps<TManager>;
-  startForwardedProps: TForwardedProps;
-  endForwardedProps: TForwardedProps;
+  rootProps: TRootProps;
+  startTextFieldProps: TTextFieldProps;
+  endTextFieldProps: TTextFieldProps;
 }
 
 interface UseMultiInputRangeFieldReturnValue<
   TManager extends PickerAnyRangeManager,
-  TForwardedProps extends {},
+  TTextFieldProps extends { [key: string]: any },
+  TRootProps extends { [key: string]: any },
 > {
-  startDate: Omit<
-    UseFieldResponse<PickerManagerEnableAccessibleFieldDOMStructure<TManager>, TForwardedProps>,
+  root: UseMultiInputRangeFieldRootPropsReturnValue<TRootProps>;
+  startTextField: Omit<
+    UseFieldResponse<PickerManagerEnableAccessibleFieldDOMStructure<TManager>, TTextFieldProps>,
     'clearable' | 'onClear'
   >;
-  endDate: Omit<
-    UseFieldResponse<PickerManagerEnableAccessibleFieldDOMStructure<TManager>, TForwardedProps>,
+  endTextField: Omit<
+    UseFieldResponse<PickerManagerEnableAccessibleFieldDOMStructure<TManager>, TTextFieldProps>,
     'clearable' | 'onClear'
   >;
   enableAccessibleFieldDOMStructure: PickerManagerEnableAccessibleFieldDOMStructure<TManager>;

@@ -80,7 +80,6 @@ export interface PickerPopperProps {
    * @default "bottom"
    */
   placement?: MuiPopperProps['placement'];
-  containerRef?: React.Ref<HTMLDivElement>;
   children?: React.ReactNode;
   onBlur?: () => void;
   slots?: PickersPopperSlots;
@@ -335,7 +334,6 @@ export function PickersPopper(inProps: PickerPopperProps) {
   const {
     anchorEl,
     children,
-    containerRef = null,
     shouldRestoreFocus,
     onBlur,
     role,
@@ -346,7 +344,7 @@ export function PickersPopper(inProps: PickerPopperProps) {
     classes: classesProp,
   } = props;
 
-  const { open } = usePickerContext();
+  const { open, popupRef } = usePickerContext();
   const { dismissViews } = usePickerPrivateContext();
 
   React.useEffect(() => {
@@ -390,7 +388,7 @@ export function PickersPopper(inProps: PickerPopperProps) {
     onBlur ?? dismissViews,
   );
   const paperRef = React.useRef<HTMLDivElement>(null);
-  const handleRef = useForkRef(paperRef, containerRef);
+  const handleRef = useForkRef(paperRef, popupRef);
   const handlePaperRef = useForkRef(handleRef, clickAwayRef as React.Ref<HTMLDivElement>);
 
   const classes = useUtilityClasses(classesProp);

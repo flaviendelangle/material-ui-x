@@ -1,12 +1,11 @@
 import * as React from 'react';
 import useSlotProps from '@mui/utils/useSlotProps';
-import useForkRef from '@mui/utils/useForkRef';
 import useId from '@mui/utils/useId';
 import { PickersPopper } from '../../components/PickersPopper';
 import { UseDesktopPickerParams, UseDesktopPickerProps } from './useDesktopPicker.types';
 import { usePicker } from '../usePicker';
 import { PickersLayout } from '../../../PickersLayout';
-import { FieldRef, InferError } from '../../../models';
+import { InferError } from '../../../models';
 import { DateOrTimeViewWithMeridiem, BaseSingleInputFieldProps, PickerValue } from '../../models';
 import { PickerProvider } from '../../components/PickerProvider';
 import { PickerFieldUIContextProvider } from '../../components/PickerFieldUI';
@@ -44,8 +43,6 @@ export const useDesktopPicker = <
     reduceAnimations,
   } = props;
 
-  const fieldRef = React.useRef<FieldRef<PickerValue>>(null);
-
   const labelId = useId();
   const isToolbarHidden = innerSlotProps?.toolbar?.hidden ?? false;
 
@@ -56,7 +53,6 @@ export const useDesktopPicker = <
   >({
     ...pickerParams,
     props,
-    fieldRef,
     localeText,
     autoFocusView: true,
     variant: 'desktop',
@@ -109,12 +105,10 @@ export const useDesktopPicker = <
     },
   };
 
-  const handleFieldRef = useForkRef(fieldRef, fieldProps.unstableFieldRef);
-
   const renderPicker = () => (
     <PickerProvider {...providerProps}>
       <PickerFieldUIContextProvider slots={slots} slotProps={slotProps}>
-        <Field {...fieldProps} unstableFieldRef={handleFieldRef} />
+        <Field {...fieldProps} />
         <PickersPopper
           role="dialog"
           placement="bottom-start"

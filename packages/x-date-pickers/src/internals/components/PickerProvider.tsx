@@ -138,6 +138,11 @@ export interface PickerContextValue<
    * Is always equal to an empty string if the component you are accessing the context from is not wrapped by a picker.
    */
   fieldFormat: string;
+  /**
+   * The ref that should be attached to the element that outermost element of the popup that contain the view if any.
+   * When using a built-in field component, this property is automatically handled.
+   */
+  popupRef: React.RefObject<any>;
 }
 
 export interface PickerActionsContextValue<

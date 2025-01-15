@@ -7,16 +7,7 @@ import Typography from '@mui/material/Typography';
 import { styled, useThemeProps } from '@mui/material/styles';
 import composeClasses from '@mui/utils/composeClasses';
 import useSlotProps from '@mui/utils/useSlotProps';
-import useForkRef from '@mui/utils/useForkRef';
-import useEventCallback from '@mui/utils/useEventCallback';
-import {
-  cleanFieldResponse,
-  executeInTheNextEventLoopTick,
-  getActiveElement,
-  useFieldOwnerState,
-  useNullablePickerContext,
-  usePickerPrivateContext,
-} from '@mui/x-date-pickers/internals';
+import { cleanFieldResponse, useFieldOwnerState } from '@mui/x-date-pickers/internals';
 import { useSplitFieldProps } from '@mui/x-date-pickers/hooks';
 import { PickersTextField } from '@mui/x-date-pickers/PickersTextField';
 import {
@@ -62,11 +53,8 @@ export function createMultiInputRangeField<TManager extends PickerAnyRangeManage
 
   const MultiInputRangeField = React.forwardRef(function MultiInputRangeField(
     props: MultiInputRangeFieldProps<TManager>,
-    forwardedRef: React.ForwardedRef<HTMLDivElement>,
+    ref: React.ForwardedRef<HTMLDivElement>,
   ) {
-    const ref = React.useRef<HTMLDivElement>(null);
-    const handleRef = useForkRef(ref, forwardedRef);
-
     const themeProps = useThemeProps({
       props,
       // eslint-disable-next-line material-ui/mui-name-matches-component-name
@@ -87,27 +75,8 @@ export function createMultiInputRangeField<TManager extends PickerAnyRangeManage
       ...otherForwardedProps
     } = forwardedProps;
 
-    const pickerContext = useNullablePickerContext();
-    const privatePickerContext = usePickerPrivateContext();
     const classes = useUtilityClasses(classesProp);
     const ownerState = useFieldOwnerState(internalProps as any);
-
-    const handleBlur = useEventCallback(() => {
-      if (!pickerContext || pickerContext.variant === 'mobile') {
-        return;
-      }
-
-      executeInTheNextEventLoopTick(() => {
-        if (
-          ref.current?.contains(getActiveElement(document)) ||
-          popperRef.current?.contains(getActiveElement(document))
-        ) {
-          return;
-        }
-
-        privatePickerContext.dismissViews();
-      });
-    });
 
     const Root = slots?.root ?? MultiInputRangeFieldRoot;
     const rootProps = useSlotProps({
@@ -115,8 +84,7 @@ export function createMultiInputRangeField<TManager extends PickerAnyRangeManage
       externalSlotProps: slotProps?.root,
       externalForwardedProps: otherForwardedProps,
       additionalProps: {
-        ref: handleRef,
-        onBlur: handleBlur,
+        ref,
       },
       ownerState,
       className: clsx(className, classes.root),
@@ -133,11 +101,12 @@ export function createMultiInputRangeField<TManager extends PickerAnyRangeManage
       ownerState: { ...ownerState, position: 'end' },
     });
 
-    const { startDate, endDate, enableAccessibleFieldDOMStructure } = useMultiInputRangeField({
+    const fieldResponse = useMultiInputRangeField({
       manager,
       internalProps,
-      startForwardedProps: startTextFieldProps,
-      endForwardedProps: endTextFieldProps,
+      rootProps,
+      startTextFieldProps,
+      endTextFieldProps,
     });
 
     const Separator = slots?.separator ?? MultiInputRangeFieldSeparator;
@@ -151,15 +120,15 @@ export function createMultiInputRangeField<TManager extends PickerAnyRangeManage
       className: classes.separator,
     });
 
-    const { textFieldProps: startDateProps } = cleanFieldResponse(startDate);
-    const { textFieldProps: endDateProps } = cleanFieldResponse(endDate);
+    const { textFieldProps: startDateProps } = cleanFieldResponse(fieldResponse.startTextField);
+    const { textFieldProps: endDateProps } = cleanFieldResponse(fieldResponse.endTextField);
 
     const TextField =
       slots?.textField ??
-      (enableAccessibleFieldDOMStructure === false ? MuiTextField : PickersTextField);
+      (fieldResponse.enableAccessibleFieldDOMStructure === false ? MuiTextField : PickersTextField);
 
     return (
-      <Root {...rootProps}>
+      <Root {...fieldResponse.root}>
         <TextField fullWidth {...startDateProps} />
         <Separator {...separatorProps} />
         <TextField fullWidth {...endDateProps} />
