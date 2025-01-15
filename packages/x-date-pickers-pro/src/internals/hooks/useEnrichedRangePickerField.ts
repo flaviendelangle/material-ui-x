@@ -181,7 +181,7 @@ const useSingleInputFieldSlotProps = <
   label,
   onBlur,
   rangePosition,
-  onRangePositionChange,
+  setRangePosition,
   fieldProps,
   currentView,
 }: UseEnrichedRangePickerFieldPropsParams<
@@ -229,7 +229,7 @@ const useSingleInputFieldSlotProps = <
       activeSectionIndex == null || activeSectionIndex < sections.length / 2 ? 'start' : 'end';
 
     if (domRangePosition != null && domRangePosition !== rangePosition) {
-      onRangePositionChange(domRangePosition);
+      setRangePosition(domRangePosition);
     }
   };
 

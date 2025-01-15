@@ -690,7 +690,9 @@ If the updated values do not fit your use case, you can [override them](/x/react
   +const { rangePosition } = usePickerRangePositionContext();
 
   -const { onRangePositionChange } = props;
-  +const { onRangePositionChange } = usePickerRangePositionContext();
+  -onRangePositionChange('start');
+  +const { setRangePosition } = usePickerRangePositionContext();
+  +setRangePosition('start');
   ```
 
 ### Slot: `toolbar`
@@ -777,7 +779,9 @@ If the updated values do not fit your use case, you can [override them](/x/react
   +const { rangePosition } = usePickerRangePositionContext();
 
   -const { onRangePositionChange } = props;
-  +const { onRangePositionChange } = usePickerRangePositionContext();
+  -onRangePositionChange('start');
+  +const { setRangePosition } = usePickerRangePositionContext();
+  +setRangePosition('start');
   ```
 
 ### Slot: `tabs`
@@ -807,7 +811,9 @@ If the updated values do not fit your use case, you can [override them](/x/react
   +const { rangePosition } = usePickerRangePositionContext();
 
   -const { onRangePositionChange } = props;
-  +const { onRangePositionChange } = usePickerRangePositionContext();
+  -onRangePositionChange('start');
+  +const { setRangePosition } = usePickerRangePositionContext();
+  +setRangePosition('start');
   ```
 
 ### Slot: `actionBar`
@@ -992,7 +998,7 @@ This hook has been removed in favor of the new `useMultiInputRangeField` hook wi
 ```
 
 :::success
-The associated types have also been removed. — [Learn how to migrate them](/x/migration/migration-pickers-v7/#removed-types).
+The associated types have also been removed. [Learn how to migrate them](/x/migration/migration-pickers-v7/#removed-types).
 :::
 
 ### `useMultiInputTimeRangeField`
@@ -1044,7 +1050,7 @@ This hook has been removed in favor of the new `useMultiInputRangeField` hook wi
 ```
 
 :::success
-The associated types have also been removed. — [Learn how to migrate them](/x/migration/migration-pickers-v7/#removed-types).
+The associated types have also been removed. [Learn how to migrate them](/x/migration/migration-pickers-v7/#removed-types).
 :::
 
 ### `useMultiInputDateTimeRangeField`
@@ -1096,7 +1102,7 @@ This hook has been removed in favor of the new `useMultiInputRangeField` hook wi
 ```
 
 :::success
-The associated types have also been removed. — [Learn how to migrate them](/x/migration/migration-pickers-v7/#removed-types).
+The associated types have also been removed. [Learn how to migrate them](/x/migration/migration-pickers-v7/#removed-types).
 :::
 
 ### `usePickerContext`
