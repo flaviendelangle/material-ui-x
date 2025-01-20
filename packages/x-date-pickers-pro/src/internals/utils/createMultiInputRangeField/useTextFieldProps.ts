@@ -1,7 +1,6 @@
 import * as React from 'react';
 import useSlotProps from '@mui/utils/useSlotProps';
 import useEventCallback from '@mui/utils/useEventCallback';
-import useForkRef from '@mui/utils/useForkRef';
 import { PickersTextField, PickersTextFieldProps } from '@mui/x-date-pickers/PickersTextField';
 import { usePickerTranslations } from '@mui/x-date-pickers/hooks';
 import {
@@ -13,18 +12,20 @@ import { FieldOwnerState, FieldRef } from '@mui/x-date-pickers/models';
 import { MultiInputRangeFieldSlotProps } from './createMultiInputRangeField.types';
 import { usePickerRangePositionContext } from '../../../hooks';
 
-export function useTextFieldProps(
-  slotProps: MultiInputRangeFieldSlotProps | undefined,
-  ownerState: FieldOwnerState,
-  position: 'start' | 'end',
-  fieldRefProp: React.Ref<FieldRef<PickerValue>> | undefined,
-) {
+export function useTextFieldProps({
+  slotProps,
+  ownerState,
+  position,
+}: {
+  slotProps: MultiInputRangeFieldSlotProps | undefined;
+  ownerState: FieldOwnerState;
+  position: 'start' | 'end';
+}): PickersTextFieldProps {
   const pickerContext = useNullablePickerContext();
   const translations = usePickerTranslations();
   const { rangePosition, setRangePosition } = usePickerRangePositionContext();
 
   const fieldRef = React.useRef<FieldRef<PickerValue>>(null);
-  const handleFieldRef = useForkRef(fieldRefProp, fieldRef);
   const previousRangePosition = React.useRef<RangePosition>(rangePosition);
 
   const openPickerIfPossible = (event: React.UIEvent) => {
@@ -109,5 +110,5 @@ export function useTextFieldProps(
     pickerContext?.view,
   ]);
 
-  return { textFieldProps, fieldRef: handleFieldRef };
+  return textFieldProps;
 }

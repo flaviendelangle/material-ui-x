@@ -17,6 +17,7 @@ import {
 } from './createMultiInputRangeField.types';
 import { useMultiInputRangeField } from '../../../hooks/useMultiInputRangeField';
 import { PickerAnyRangeManager } from '../../models/managers';
+import { useTextFieldProps } from './useTextFieldProps';
 
 export function createMultiInputRangeField<TManager extends PickerAnyRangeManager>({
   useManager,
@@ -90,16 +91,8 @@ export function createMultiInputRangeField<TManager extends PickerAnyRangeManage
       className: clsx(className, classes.root),
     });
 
-    const startTextFieldProps = useSlotProps({
-      elementType: PickersTextField,
-      externalSlotProps: slotProps?.textField,
-      ownerState: { ...ownerState, position: 'start' },
-    });
-    const endTextFieldProps = useSlotProps({
-      elementType: PickersTextField,
-      externalSlotProps: slotProps?.textField,
-      ownerState: { ...ownerState, position: 'end' },
-    });
+    const startTextFieldProps = useTextFieldProps({ slotProps, ownerState, position: 'start' });
+    const endTextFieldProps = useTextFieldProps({ slotProps, ownerState, position: 'end' });
 
     const fieldResponse = useMultiInputRangeField({
       manager,
