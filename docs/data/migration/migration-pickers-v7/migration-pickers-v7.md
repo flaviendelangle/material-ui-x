@@ -1527,7 +1527,7 @@ If you were using them, you need to replace them with the following code:
     -    > {}
     +interface CustomDateRangeFieldProps
     +  extends Omit<
-    +     DateRangePickerFieldProps<true>,
+    +     DateRangePickerFieldProps,
     +    'unstableFieldRef' | 'clearable' | 'onClear'
     +  >,
     +  MultiInputFieldRefs {}
@@ -1559,7 +1559,7 @@ If you were using them, you need to replace them with the following code:
     -    > {}
     +interface JoyMultiInputDateRangeFieldProps
     +  extends Omit<
-    +     DateTimeRangePickerFieldProps<false>,
+    +     DateTimeRangePickerFieldProps,
     +    'unstableFieldRef' | 'clearable' | 'onClear'
     +  >,
     +  MultiInputFieldRefs {}

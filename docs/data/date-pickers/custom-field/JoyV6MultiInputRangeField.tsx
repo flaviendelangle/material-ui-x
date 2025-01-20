@@ -97,7 +97,7 @@ const JoyField = React.forwardRef(
 
 interface JoyMultiInputDateRangeFieldProps
   extends Omit<
-      DateRangePickerFieldProps<false>,
+      DateRangePickerFieldProps,
       'unstableFieldRef' | 'clearable' | 'onClear'
     >,
     MultiInputFieldRefs {
