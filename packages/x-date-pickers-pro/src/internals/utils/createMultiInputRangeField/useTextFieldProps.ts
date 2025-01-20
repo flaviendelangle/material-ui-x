@@ -21,7 +21,7 @@ export function useTextFieldProps(
 ) {
   const pickerContext = useNullablePickerContext();
   const translations = usePickerTranslations();
-  const { rangePosition, onRangePositionChange } = usePickerRangePositionContext();
+  const { rangePosition, setRangePosition } = usePickerRangePositionContext();
 
   const fieldRef = React.useRef<FieldRef<PickerValue>>(null);
   const handleFieldRef = useForkRef(fieldRefProp, fieldRef);
@@ -33,7 +33,7 @@ export function useTextFieldProps(
     }
 
     event.stopPropagation();
-    onRangePositionChange(position);
+    setRangePosition(position);
     if (pickerContext.triggerStatus === 'enabled') {
       event.preventDefault();
       pickerContext.setOpen(true);
@@ -54,7 +54,7 @@ export function useTextFieldProps(
 
   const handleFocus = useEventCallback(() => {
     if (pickerContext?.open) {
-      onRangePositionChange(position);
+      setRangePosition(position);
       if (previousRangePosition.current !== position && pickerContext.initialView) {
         pickerContext.setView?.(pickerContext.initialView);
       }

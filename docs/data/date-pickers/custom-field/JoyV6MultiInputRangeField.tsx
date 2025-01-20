@@ -30,6 +30,7 @@ import {
   MultiInputFieldRefs,
   MultiInputFieldSlotTextFieldProps,
 } from '@mui/x-date-pickers-pro/models';
+import { over } from 'lodash';
 
 const joyTheme = extendJoyTheme();
 
@@ -133,24 +134,25 @@ const JoyMultiInputDateRangeField = React.forwardRef(
     const fieldResponse = useMultiInputRangeField({
       manager,
       internalProps: { ...internalProps, enableAccessibleFieldDOMStructure: false },
-      startForwardedProps: startTextFieldProps,
-      endForwardedProps: endTextFieldProps,
+      rootProps: {
+        ref,
+        spacing: 2,
+        overflow: 'auto',
+        direction: 'row' as const,
+        alignItems: 'center',
+        ...otherForwardedProps,
+      },
+      startTextFieldProps,
+      endTextFieldProps,
     });
 
     return (
-      <Stack
-        ref={ref}
-        spacing={2}
-        overflow="auto"
-        direction="row"
-        alignItems="center"
-        {...otherForwardedProps}
-      >
-        <JoyField {...fieldResponse.startDate} />
+      <Stack {...fieldResponse.root}>
+        <JoyField {...fieldResponse.startTextField} />
         <FormControl>
           <Typography sx={{ marginTop: '25px' }}>{' – '}</Typography>
         </FormControl>
-        <JoyField {...fieldResponse.endDate} />
+        <JoyField {...fieldResponse.endTextField} />
       </Stack>
     );
   },
