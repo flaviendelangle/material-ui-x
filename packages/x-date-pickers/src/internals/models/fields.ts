@@ -1,8 +1,6 @@
 import { SxProps } from '@mui/material/styles';
 import type { FieldSection, PickerOwnerState } from '../../models';
-import type { UseFieldInternalProps } from '../hooks/useField';
 import { RangePosition } from './pickers';
-import { PickerValidValue } from './value';
 import type { ExportedPickerFieldUIProps } from '../components/PickerFieldUI';
 
 export interface FieldRangeSection extends FieldSection {

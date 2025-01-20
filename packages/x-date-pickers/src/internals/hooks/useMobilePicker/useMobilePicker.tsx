@@ -36,8 +36,6 @@ export const useMobilePicker = <
     name,
     label,
     inputRef,
-    readOnly,
-    autoFocus,
     localeText,
   } = props;
 

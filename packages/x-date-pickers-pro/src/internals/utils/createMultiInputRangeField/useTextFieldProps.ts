@@ -31,7 +31,6 @@ export function useTextFieldProps({
   const previousRangePosition = React.useRef<RangePosition>(rangePosition);
 
   const openPickerIfPossible = (event: React.UIEvent) => {
-    console.log('AAAAA', pickerContext);
     if (!pickerContext) {
       return;
     }
@@ -72,7 +71,8 @@ export function useTextFieldProps({
       onKeyDown: handleKeyDown,
       onClick: handleClick,
       onFocus: handleFocus,
-      label: translations[position],
+      // TODO: Decide if we also want to set the default labels on standalone fields.
+      label: pickerContext ? translations[position] : undefined,
       focused: pickerContext?.open ? rangePosition === position : undefined,
       ...(pickerContext?.variant === 'mobile' && { readOnly: true }),
     },

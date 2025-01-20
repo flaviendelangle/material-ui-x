@@ -5,7 +5,7 @@ import { SlotComponentProps } from '@mui/utils';
 import { SlotComponentPropsFromProps } from '@mui/x-internals/types';
 import { PickerOwnerState, FieldOwnerState } from '@mui/x-date-pickers/models';
 import { UseClearableFieldSlots, UseClearableFieldSlotProps } from '@mui/x-date-pickers/hooks';
-import { BaseSingleInputFieldProps, PickerRangeValue } from '@mui/x-date-pickers/internals';
+import { BaseSingleInputFieldProps } from '@mui/x-date-pickers/internals';
 import { PickersTextField } from '@mui/x-date-pickers/PickersTextField';
 import { RangePosition, PickerRangeFieldSlotProps } from '../../models';
 import { BaseMultiInputFieldProps } from '../models/fields';

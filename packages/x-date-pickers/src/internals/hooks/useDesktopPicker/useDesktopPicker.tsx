@@ -36,8 +36,6 @@ export const useDesktopPicker = <
     name,
     label,
     inputRef,
-    readOnly,
-    autoFocus,
     localeText,
     reduceAnimations,
   } = props;

@@ -30,7 +30,6 @@ import {
   MultiInputFieldRefs,
   MultiInputFieldSlotTextFieldProps,
 } from '@mui/x-date-pickers-pro/models';
-import { over } from 'lodash';
 
 const joyTheme = extendJoyTheme();
 
