@@ -31,6 +31,7 @@ export function useTextFieldProps({
   const previousRangePosition = React.useRef<RangePosition>(rangePosition);
 
   const openPickerIfPossible = (event: React.UIEvent) => {
+    console.log('AAAAA', pickerContext);
     if (!pickerContext) {
       return;
     }
