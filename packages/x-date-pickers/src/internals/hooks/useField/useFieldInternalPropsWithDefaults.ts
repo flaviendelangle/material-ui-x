@@ -55,6 +55,7 @@ export function useFieldInternalPropsWithDefaults<TManager extends PickerAnyMana
         disabled: pickerContext.disabled,
         readOnly: pickerContext.readOnly,
         autoFocus: pickerContext.autoFocus && !pickerContext.open,
+        focused: pickerContext.open,
         format: pickerContext.fieldFormat,
         formatDensity: fieldPrivateContext.formatDensity,
         enableAccessibleFieldDOMStructure: fieldPrivateContext.enableAccessibleFieldDOMStructure,

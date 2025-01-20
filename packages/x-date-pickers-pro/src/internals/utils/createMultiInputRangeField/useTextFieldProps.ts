@@ -73,7 +73,7 @@ export function useTextFieldProps({
       onFocus: handleFocus,
       // TODO: Decide if we also want to set the default labels on standalone fields.
       label: pickerContext ? translations[position] : undefined,
-      focused: pickerContext?.open ? rangePosition === position : undefined,
+      focused: pickerContext?.open ? rangePosition === position : false,
       ...(pickerContext?.variant === 'mobile' && { readOnly: true }),
     },
     ownerState: { ...ownerState, position },

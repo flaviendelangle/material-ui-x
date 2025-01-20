@@ -64,7 +64,6 @@ export const useMobilePicker = <
       sx,
       label,
       name,
-      focused: providerProps.contextValue.open ? true : undefined,
       ...(isToolbarHidden && { id: labelId }),
       ...(!!inputRef && { inputRef }),
     },

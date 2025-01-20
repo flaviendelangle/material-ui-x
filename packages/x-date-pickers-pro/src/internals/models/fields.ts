@@ -11,17 +11,4 @@ import type { MultiInputFieldSlotRootProps, RangePosition } from '../../models';
 export interface BaseMultiInputFieldProps {
   className: string | undefined;
   sx: SxProps<any> | undefined;
-  slots?: {
-    root?: React.ElementType;
-    separator?: React.ElementType;
-    textField?: React.ElementType;
-  };
-  slotProps?: {
-    root?: SlotComponentProps<React.ElementType<MultiInputFieldSlotRootProps>, {}, FieldOwnerState>;
-    textField?: SlotComponentProps<
-      typeof PickersTextField,
-      {},
-      FieldOwnerState & { position?: RangePosition }
-    >;
-  };
 }

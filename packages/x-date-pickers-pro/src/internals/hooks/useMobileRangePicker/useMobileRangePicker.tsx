@@ -67,9 +67,6 @@ export const useMobileRangePicker = <
     localeText,
   });
 
-  // Temporary hack to hide the opening button on the range pickers until we have migrate them to the new opening logic.
-  providerProps.contextValue.triggerStatus = 'hidden';
-
   const Field = slots.field;
   const fieldProps: RangePickerPropsForFieldSlot<boolean> = useSlotProps({
     elementType: Field,
@@ -83,7 +80,6 @@ export const useMobileRangePicker = <
         name,
         label,
         id: labelId,
-        focused: providerProps.contextValue.open ? true : undefined,
       }),
     },
     ownerState,

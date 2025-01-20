@@ -67,7 +67,6 @@ export const useDesktopRangePicker = <
         ...(!!inputRef && { inputRef }),
         name,
         label,
-        focused: providerProps.contextValue.open ? true : undefined,
       }),
     },
     ownerState,
