@@ -20,6 +20,7 @@ import { useUtils } from '../useUtils';
 import { arrayIncludes } from '../../utils/utils';
 import { UsePickerViewsProviderParams } from './usePickerViews';
 import { PickerFieldPrivateContextValue } from '../useNullableFieldPrivateContext';
+import type { UseFieldInternalProps } from '../useField';
 
 function getOrientation(): PickerOrientation {
   if (typeof window === 'undefined') {
@@ -215,7 +216,14 @@ export interface UsePickerProviderProps extends FormProps {
 /**
  * Props used to create the picker's contexts and that are not available on static pickers.
  */
-export interface UsePickerProviderNonStaticProps extends PickerFieldPrivateContextValue {
+export interface UsePickerProviderNonStaticProps
+  extends Pick<
+    UseFieldInternalProps<any, any, any>,
+    | 'formatDensity'
+    | 'enableAccessibleFieldDOMStructure'
+    | 'selectedSections'
+    | 'onSelectedSectionsChange'
+  > {
   // We don't take the `format` prop from `UseFieldInternalProps` to have a custom JSDoc description.
   /**
    * Format of the date when rendered in the input(s).

@@ -197,6 +197,8 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
     loading,
     renderLoading,
     disableHighlightToday,
+    focusedView: inFocusedView,
+    onFocusedViewChange,
     readOnly,
     disabled,
     showDaysOutsideCurrentMonth,
@@ -230,13 +232,15 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
     valueManager: rangeValueManager,
   });
 
-  const { setValueAndGoToNextView, view } = useViews({
+  const { view, setValueAndGoToNextView, focusedView, setFocusedView } = useViews({
     view: inView,
     views,
     openTo,
     onChange: handleValueChange,
     onViewChange,
     autoFocus,
+    focusedView: inFocusedView,
+    onFocusedViewChange,
   });
 
   const utils = useUtils();
@@ -361,6 +365,8 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
     shouldDisableDate: wrappedShouldDisableDate,
     timezone,
   });
+
+  const hasFocus = focusedView !== null;
 
   const CalendarHeader = slots?.calendarHeader ?? PickersRangeCalendarHeader;
   const calendarHeaderProps: Omit<PickersRangeCalendarHeaderProps, 'month' | 'monthIndex'> =
@@ -588,6 +594,8 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
               currentMonth={month}
               TransitionProps={CalendarTransitionProps}
               shouldDisableDate={wrappedShouldDisableDate}
+              hasFocus={hasFocus}
+              onFocusedViewChange={(isViewFocused) => setFocusedView('day', isViewFocused)}
               showDaysOutsideCurrentMonth={calendars === 1 && showDaysOutsideCurrentMonth}
               dayOfWeekFormatter={dayOfWeekFormatter}
               loading={loading}

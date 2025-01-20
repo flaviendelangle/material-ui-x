@@ -10,15 +10,12 @@ import {
   PickerRangeValue,
   PickerFieldUIContextProvider,
 } from '@mui/x-date-pickers/internals';
-import { FieldRef, InferError } from '@mui/x-date-pickers/models';
+import { InferError } from '@mui/x-date-pickers/models';
 import {
   UseDesktopRangePickerParams,
   UseDesktopRangePickerProps,
 } from './useDesktopRangePicker.types';
-import {
-  RangePickerPropsForFieldSlot,
-  useEnrichedRangePickerField,
-} from '../useEnrichedRangePickerField';
+import { RangePickerPropsForFieldSlot } from '../useEnrichedRangePickerField';
 import { getReleaseInfo } from '../../utils/releaseInfo';
 import { useRangePosition } from '../useRangePosition';
 import { PickerRangePositionContext } from '../../../hooks/usePickerRangePositionContext';
@@ -45,25 +42,17 @@ export const useDesktopRangePicker = <
     slotProps,
     className,
     sx,
-    label,
     inputRef,
     name,
+    label,
     readOnly,
     autoFocus,
-    disableOpenPicker,
     localeText,
     reduceAnimations,
   } = props;
 
-  const fieldContainerRef = React.useRef<HTMLDivElement>(null);
-  const singleInputFieldRef = React.useRef<FieldRef<PickerRangeValue>>(null);
-  const initialView = React.useRef<TView | null>(props.openTo ?? null);
-
   const fieldType = (slots.field as any).fieldType ?? 'multi-input';
-  const rangePositionResponse = useRangePosition(
-    props,
-    fieldType === 'single-input' ? singleInputFieldRef : undefined,
-  );
+  const rangePositionResponse = useRangePosition(props);
 
   const { providerProps, renderCurrentView, shouldRestoreFocus, ownerState } = usePicker<
     PickerRangeValue,
@@ -78,14 +67,9 @@ export const useDesktopRangePicker = <
   });
 
   // Temporary hack to hide the opening button on the range pickers until we have migrate them to the new opening logic.
-  providerProps.contextValue.triggerStatus = 'hidden';
-
-  React.useEffect(() => {
-    if (providerProps.contextValue.view) {
-      initialView.current = providerProps.contextValue.view;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  if (fieldType === 'multi-input') {
+    providerProps.contextValue.triggerStatus = 'hidden';
+  }
 
   const Field = slots.field;
 
@@ -104,55 +88,28 @@ export const useDesktopRangePicker = <
       // Forwarded props
       className,
       sx,
-      ref: fieldContainerRef,
-      ...(fieldType === 'single-input' && !!inputRef && { inputRef }),
-      ...(fieldType === 'single-input' && { name }),
+      ...(fieldType === 'single-input' && {
+        ...(!!inputRef && { inputRef }),
+        name,
+        label,
+        focused: providerProps.contextValue.open ? true : undefined,
+      }),
     },
     ownerState,
-  });
-
-  const enrichedFieldResponse = useEnrichedRangePickerField<
-    TView,
-    TEnableAccessibleFieldDOMStructure,
-    InferError<TExternalProps>
-  >({
-    variant: 'desktop',
-    fieldType,
-    // These direct access to `providerProps` will go away once the range fields handle the picker opening
-    contextValue: providerProps.contextValue,
-    fieldPrivateContextValue: providerProps.fieldPrivateContextValue,
-    readOnly,
-    disableOpenPicker,
-    label,
-    pickerSlotProps: slotProps,
-    pickerSlots: slots,
-    fieldProps,
-    currentView:
-      providerProps.contextValue.view !== props.openTo
-        ? providerProps.contextValue.view
-        : undefined,
-    ...rangePositionResponse,
   });
 
   const Layout = slots?.layout ?? PickersLayout;
 
   const renderPicker = () => (
-    <PickerProvider
-      {...providerProps}
-      // This override will go away once the range fields handle the picker opening
-      fieldPrivateContextValue={{
-        ...providerProps.fieldPrivateContextValue,
-        ...enrichedFieldResponse.fieldPrivateContextValue,
-      }}
-    >
+    <PickerProvider {...providerProps}>
       <PickerFieldUIContextProvider slots={slots} slotProps={slotProps}>
         <PickerRangePositionContext.Provider value={rangePositionResponse}>
-          <Field {...enrichedFieldResponse.fieldProps} />
+          <Field {...fieldProps} />
           <PickersPopper
             role="tooltip"
             placement="bottom-start"
             anchorEl={providerProps.contextValue.triggerRef.current}
-            onBlur={handleBlur}
+            // onBlur={handleBlur}
             slots={slots}
             slotProps={slotProps}
             shouldRestoreFocus={shouldRestoreFocus}
