@@ -113,8 +113,8 @@ export function createMultiInputRangeField<TManager extends PickerAnyRangeManage
       className: classes.separator,
     });
 
-    const { textFieldProps: startDateProps } = cleanFieldResponse(fieldResponse.startTextField);
-    const { textFieldProps: endDateProps } = cleanFieldResponse(fieldResponse.endTextField);
+    const cleanStartTextFieldResponse = cleanFieldResponse(fieldResponse.startTextField);
+    const cleanEndTextFieldResponse = cleanFieldResponse(fieldResponse.endTextField);
 
     const TextField =
       slots?.textField ??
@@ -122,9 +122,9 @@ export function createMultiInputRangeField<TManager extends PickerAnyRangeManage
 
     return (
       <Root {...fieldResponse.root}>
-        <TextField fullWidth {...startDateProps} />
+        <TextField fullWidth {...cleanStartTextFieldResponse.textFieldProps} />
         <Separator {...separatorProps} />
-        <TextField fullWidth {...endDateProps} />
+        <TextField fullWidth {...cleanEndTextFieldResponse.textFieldProps} />
       </Root>
     );
   } as any) as any;

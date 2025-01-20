@@ -5,7 +5,6 @@ import { PickersModalDialog } from '../../components/PickersModalDialog';
 import { UseMobilePickerParams, UseMobilePickerProps } from './useMobilePicker.types';
 import { usePicker } from '../usePicker';
 import { PickersLayout } from '../../../PickersLayout';
-import { InferError } from '../../../models';
 import { BaseSingleInputFieldProps, DateOrTimeViewWithMeridiem, PickerValue } from '../../models';
 import { PickerProvider } from '../../components/PickerProvider';
 import { PickerFieldUIContextProvider } from '../../components/PickerFieldUI';
@@ -58,18 +57,10 @@ export const useMobilePicker = <
   });
 
   const Field = slots.field;
-  const fieldProps: BaseSingleInputFieldProps<
-    PickerValue,
-    TEnableAccessibleFieldDOMStructure,
-    InferError<TExternalProps>
-  > = useSlotProps({
+  const fieldProps: BaseSingleInputFieldProps = useSlotProps({
     elementType: Field,
     externalSlotProps: innerSlotProps?.field,
     additionalProps: {
-      // Internal props
-      readOnly,
-      autoFocus: autoFocus && !props.open,
-
       // Forwarded props
       className,
       sx,

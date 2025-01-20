@@ -157,7 +157,7 @@ export function useMultiInputRangeField<
       value: valueProp === undefined ? undefined : valueProp[0],
       defaultValue: defaultValue === undefined ? undefined : defaultValue[0],
       onChange: handleStartDateChange,
-      autoFocus, // Do not add on end field.
+      autoFocus,
     },
   });
 
@@ -172,6 +172,7 @@ export function useMultiInputRangeField<
       value: valueProp === undefined ? undefined : valueProp[1],
       defaultValue: defaultValue === undefined ? undefined : defaultValue[1],
       onChange: handleEndDateChange,
+      autoFocus: false,
     },
   });
 

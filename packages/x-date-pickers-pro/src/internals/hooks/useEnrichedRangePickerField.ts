@@ -46,14 +46,6 @@ export interface RangePickerFieldSlotProps<TEnableAccessibleFieldDOMStructure ex
   >;
 }
 
-export type RangePickerPropsForFieldSlot<
-  TIsSingleInput extends boolean,
-  TEnableAccessibleFieldDOMStructure extends boolean,
-  TError,
-> =
-  | (TIsSingleInput extends true
-      ? BaseSingleInputFieldProps<PickerRangeValue, TEnableAccessibleFieldDOMStructure, TError>
-      : never)
-  | (TIsSingleInput extends false
-      ? BaseMultiInputFieldProps<TEnableAccessibleFieldDOMStructure, TError>
-      : never);
+export type RangePickerPropsForFieldSlot<TIsSingleInput extends boolean> =
+  | (TIsSingleInput extends true ? BaseSingleInputFieldProps : never)
+  | (TIsSingleInput extends false ? BaseMultiInputFieldProps : never);

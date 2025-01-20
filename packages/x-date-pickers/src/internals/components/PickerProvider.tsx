@@ -102,6 +102,12 @@ export interface PickerContextValue<
    */
   readOnly: boolean;
   /**
+   * `true` if the picker should be focused on mount.
+   * If the picker has a field and is not open, the field should be focused.
+   * If the picker does not have a field (if it is a static picker) or is not open, the view should be focused.
+   */
+  autoFocus: boolean;
+  /**
    * The responsive variant of the picker.
    * Is equal to "desktop" when using a desktop picker (like <DesktopDatePicker />).
    * Is equal to "mobile" when using a mobile picker (like <MobileDatePicker />).

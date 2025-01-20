@@ -5,7 +5,6 @@ import { PickersPopper } from '../../components/PickersPopper';
 import { UseDesktopPickerParams, UseDesktopPickerProps } from './useDesktopPicker.types';
 import { usePicker } from '../usePicker';
 import { PickersLayout } from '../../../PickersLayout';
-import { InferError } from '../../../models';
 import { DateOrTimeViewWithMeridiem, BaseSingleInputFieldProps, PickerValue } from '../../models';
 import { PickerProvider } from '../../components/PickerProvider';
 import { PickerFieldUIContextProvider } from '../../components/PickerFieldUI';
@@ -59,18 +58,10 @@ export const useDesktopPicker = <
   });
 
   const Field = slots.field;
-  const fieldProps: BaseSingleInputFieldProps<
-    PickerValue,
-    TEnableAccessibleFieldDOMStructure,
-    InferError<TExternalProps>
-  > = useSlotProps({
+  const fieldProps: BaseSingleInputFieldProps = useSlotProps({
     elementType: Field,
     externalSlotProps: innerSlotProps?.field,
     additionalProps: {
-      // Internal props
-      readOnly,
-      autoFocus: autoFocus && !props.open,
-
       // Forwarded props
       className,
       sx,

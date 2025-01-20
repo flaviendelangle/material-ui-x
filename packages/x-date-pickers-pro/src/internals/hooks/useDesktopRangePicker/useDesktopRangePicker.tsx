@@ -10,7 +10,6 @@ import {
   PickerRangeValue,
   PickerFieldUIContextProvider,
 } from '@mui/x-date-pickers/internals';
-import { InferError } from '@mui/x-date-pickers/models';
 import {
   UseDesktopRangePickerParams,
   UseDesktopRangePickerProps,
@@ -37,19 +36,8 @@ export const useDesktopRangePicker = <
 }: UseDesktopRangePickerParams<TView, TEnableAccessibleFieldDOMStructure, TExternalProps>) => {
   useLicenseVerifier('x-date-pickers-pro', releaseInfo);
 
-  const {
-    slots,
-    slotProps,
-    className,
-    sx,
-    inputRef,
-    name,
-    label,
-    readOnly,
-    autoFocus,
-    localeText,
-    reduceAnimations,
-  } = props;
+  const { slots, slotProps, className, sx, inputRef, name, label, localeText, reduceAnimations } =
+    props;
 
   const fieldType = (slots.field as any).fieldType ?? 'multi-input';
   const rangePositionResponse = useRangePosition(props);
@@ -73,18 +61,10 @@ export const useDesktopRangePicker = <
 
   const Field = slots.field;
 
-  const fieldProps: RangePickerPropsForFieldSlot<
-    boolean,
-    TEnableAccessibleFieldDOMStructure,
-    InferError<TExternalProps>
-  > = useSlotProps({
+  const fieldProps: RangePickerPropsForFieldSlot<boolean> = useSlotProps({
     elementType: Field,
     externalSlotProps: slotProps?.field,
     additionalProps: {
-      // Internal props
-      readOnly,
-      autoFocus: autoFocus && !props.open,
-
       // Forwarded props
       className,
       sx,

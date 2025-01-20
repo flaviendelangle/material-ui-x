@@ -12,7 +12,6 @@ import {
   PickerFieldUIContextProvider,
 } from '@mui/x-date-pickers/internals';
 import { usePickerTranslations } from '@mui/x-date-pickers/hooks';
-import { InferError } from '@mui/x-date-pickers/models';
 import useId from '@mui/utils/useId';
 import {
   UseMobileRangePickerParams,
@@ -74,18 +73,10 @@ export const useMobileRangePicker = <
   providerProps.contextValue.triggerStatus = 'hidden';
 
   const Field = slots.field;
-  const fieldProps: RangePickerPropsForFieldSlot<
-    boolean,
-    TEnableAccessibleFieldDOMStructure,
-    InferError<TExternalProps>
-  > = useSlotProps({
+  const fieldProps: RangePickerPropsForFieldSlot<boolean> = useSlotProps({
     elementType: Field,
     externalSlotProps: innerSlotProps?.field,
     additionalProps: {
-      // Internal props
-      readOnly,
-      autoFocus: autoFocus && !props.open,
-
       // Forwarded props
       className,
       sx,
