@@ -47,8 +47,6 @@ export const useMobileRangePicker = <
     label,
     inputRef,
     name,
-    readOnly,
-    autoFocus,
     localeText,
   } = props;
 
