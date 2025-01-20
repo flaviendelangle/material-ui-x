@@ -10,7 +10,7 @@ import {
 } from '@mui/x-date-pickers/internals';
 import { FieldOwnerState, FieldRef } from '@mui/x-date-pickers/models';
 import { MultiInputRangeFieldSlotProps } from './createMultiInputRangeField.types';
-import { usePickerRangePositionContext } from '../../../hooks';
+import { useNullablePickerRangePositionContext } from '../../hooks/useNullablePickerRangePositionContext';
 
 export function useTextFieldProps({
   slotProps,
@@ -23,7 +23,9 @@ export function useTextFieldProps({
 }): PickersTextFieldProps {
   const pickerContext = useNullablePickerContext();
   const translations = usePickerTranslations();
-  const { rangePosition, setRangePosition } = usePickerRangePositionContext();
+  const rangePositionContext = useNullablePickerRangePositionContext();
+  const rangePosition = rangePositionContext?.rangePosition ?? 'start';
+  const setRangePosition = rangePositionContext?.setRangePosition;
 
   const fieldRef = React.useRef<FieldRef<PickerValue>>(null);
   const previousRangePosition = React.useRef<RangePosition>(rangePosition);
@@ -34,7 +36,7 @@ export function useTextFieldProps({
     }
 
     event.stopPropagation();
-    setRangePosition(position);
+    setRangePosition?.(position);
     if (pickerContext.triggerStatus === 'enabled') {
       event.preventDefault();
       pickerContext.setOpen(true);
@@ -55,7 +57,7 @@ export function useTextFieldProps({
 
   const handleFocus = useEventCallback(() => {
     if (pickerContext?.open) {
-      setRangePosition(position);
+      setRangePosition?.(position);
       if (previousRangePosition.current !== position && pickerContext.initialView) {
         pickerContext.setView?.(pickerContext.initialView);
       }
