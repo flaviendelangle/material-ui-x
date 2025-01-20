@@ -133,6 +133,7 @@ function MaskedDateField(props) {
     <TextField
       placeholder={parsedFormat}
       error={hasValidationError}
+      focused={pickerContext.open}
       {...rifmProps}
       {...forwardedProps}
       InputProps={{

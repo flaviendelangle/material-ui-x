@@ -44,6 +44,7 @@ function CustomDateField(props: DatePickerFieldProps) {
       value={inputValue}
       onChange={handleChange}
       error={hasValidationError}
+      focused={pickerContext.open}
     />
   );
 }
