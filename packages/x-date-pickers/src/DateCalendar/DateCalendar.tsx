@@ -192,6 +192,7 @@ export const DateCalendar = React.forwardRef(function DateCalendar(
     disablePast,
     disableFuture,
     timezone,
+    autoFocus,
   });
 
   // When disabled, limit the view to the selected date
@@ -391,7 +392,7 @@ export const DateCalendar = React.forwardRef(function DateCalendar(
               shouldDisableDate={shouldDisableDate}
               shouldDisableMonth={shouldDisableMonth}
               shouldDisableYear={shouldDisableYear}
-              hasFocus={hasFocus}
+              focusableDay={calendarState.focusedDay ?? referenceDate}
               onFocusedViewChange={(isViewFocused) => setFocusedView('day', isViewFocused)}
               showDaysOutsideCurrentMonth={showDaysOutsideCurrentMonth}
               fixedWeekNumber={fixedWeekNumber}

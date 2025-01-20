@@ -21,7 +21,6 @@ import {
   useDefaultDates,
   useUtils,
   PickerSelectionState,
-  useNow,
   DEFAULT_DESKTOP_MODE_MEDIA_QUERY,
   useControlledValueWithTimezone,
   useViews,
@@ -176,7 +175,7 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
   const {
     value: valueProp,
     defaultValue,
-    referenceDate,
+    referenceDate: referenceDateProp,
     onChange,
     className,
     classes: classesProp,
@@ -226,13 +225,13 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
     name: 'DateRangeCalendar',
     timezone: timezoneProp,
     value: valueProp,
-    referenceDate,
+    referenceDate: referenceDateProp,
     defaultValue,
     onChange,
     valueManager: rangeValueManager,
   });
 
-  const { view, setValueAndGoToNextView, focusedView, setFocusedView } = useViews({
+  const { view, setValueAndGoToNextView, setFocusedView } = useViews({
     view: inView,
     views,
     openTo,
@@ -244,7 +243,6 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
   });
 
   const utils = useUtils();
-  const now = useNow(timezone);
   const id = useId();
 
   const { rangePosition, setRangePosition } = useRangePosition({
@@ -272,7 +270,7 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
         rangePosition,
         allowRangeFlip,
         shouldMergeDateAndTime: true,
-        referenceDate,
+        referenceDate: referenceDateProp,
       });
 
       const isNextSectionAvailable = availableRangePositions.includes(nextSelection);
@@ -347,6 +345,7 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
   }, [shouldDisableDate, rangePosition, draggingDatePosition]);
 
   const {
+    referenceDate,
     calendarState,
     changeFocusedDay,
     changeMonth,
@@ -354,19 +353,18 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
     onMonthSwitchingAnimationEnd,
   } = useCalendarState({
     value: value[0] || value[1],
-    referenceDate,
+    referenceDate: referenceDateProp,
     disableFuture,
     disablePast,
-    disableSwitchToMonthOnDayFocus: true,
+    calendars,
     maxDate,
     minDate,
     onMonthChange,
     reduceAnimations,
     shouldDisableDate: wrappedShouldDisableDate,
     timezone,
+    autoFocus,
   });
-
-  const hasFocus = focusedView !== null;
 
   const CalendarHeader = slots?.calendarHeader ?? PickersRangeCalendarHeader;
   const calendarHeaderProps: Omit<PickersRangeCalendarHeaderProps, 'month' | 'monthIndex'> =
@@ -539,28 +537,6 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
     return Array.from({ length: calendars }).map((_, index) => utils.addMonths(firstMonth, index));
   }, [utils, calendarState.currentMonth, calendars, currentMonthCalendarPosition]);
 
-  const focusedMonth = React.useMemo(() => {
-    if (!autoFocus) {
-      return null;
-    }
-
-    // The focus priority of the "day" view is as follows:
-    // 1. Month of the `start` date
-    // 2. Month of the `end` date
-    // 3. Month of the current date
-    // 4. First visible month
-
-    if (value[0] != null) {
-      return visibleMonths.find((month) => utils.isSameMonth(month, value[0]!));
-    }
-
-    if (value[1] != null) {
-      return visibleMonths.find((month) => utils.isSameMonth(month, value[1]!));
-    }
-
-    return visibleMonths.find((month) => utils.isSameMonth(month, now)) ?? visibleMonths[0];
-  }, [utils, value, visibleMonths, autoFocus, now]);
-
   return (
     <DateRangeCalendarRoot
       ref={ref}
@@ -594,7 +570,7 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
               currentMonth={month}
               TransitionProps={CalendarTransitionProps}
               shouldDisableDate={wrappedShouldDisableDate}
-              hasFocus={hasFocus}
+              focusableDay={calendarState.focusedDay ?? referenceDate}
               onFocusedViewChange={(isViewFocused) => setFocusedView('day', isViewFocused)}
               showDaysOutsideCurrentMonth={calendars === 1 && showDaysOutsideCurrentMonth}
               dayOfWeekFormatter={dayOfWeekFormatter}
@@ -602,7 +578,6 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
               renderLoading={renderLoading}
               slots={slotsForDayCalendar}
               slotProps={slotPropsForDayCalendar}
-              autoFocus={month === focusedMonth}
               fixedWeekNumber={fixedWeekNumber}
               displayWeekNumber={displayWeekNumber}
               timezone={timezone}
