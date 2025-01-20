@@ -44,7 +44,6 @@ const JoyDateField = React.forwardRef((props, ref) => {
     // Can be used to style the component
     disabled,
     readOnly,
-    focused,
     error,
     inputRef,
     // The rest can be passed to the root element
