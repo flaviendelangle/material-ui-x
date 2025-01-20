@@ -62,7 +62,7 @@ export const useDesktopRangePicker = <
     ...pickerParams,
     props,
     variant: 'desktop',
-    autoFocusView: false,
+    autoFocusView: fieldType === 'single-input',
     localeText,
   });
 

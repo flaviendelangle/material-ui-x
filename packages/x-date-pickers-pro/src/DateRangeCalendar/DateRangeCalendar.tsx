@@ -231,7 +231,7 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
     valueManager: rangeValueManager,
   });
 
-  const { view, setValueAndGoToNextView, setFocusedView } = useViews({
+  const { view, focusedView, setFocusedView, setValueAndGoToNextView } = useViews({
     view: inView,
     views,
     openTo,
@@ -365,6 +365,10 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
     timezone,
     autoFocus,
   });
+
+  if (focusedView === 'day' && calendarState.focusedDay === null) {
+    changeFocusedDay(referenceDate);
+  }
 
   const CalendarHeader = slots?.calendarHeader ?? PickersRangeCalendarHeader;
   const calendarHeaderProps: Omit<PickersRangeCalendarHeaderProps, 'month' | 'monthIndex'> =
