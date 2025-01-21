@@ -51,7 +51,7 @@ export const useDesktopRangePicker = <
     reduceAnimations,
   } = props;
 
-  const fieldType = (slots.field as any).fieldType ?? 'multi-input';
+  const fieldType = (slots.field as any).fieldType ?? 'single-input';
   const rangePositionResponse = useRangePosition(props);
 
   const { providerProps, renderCurrentView, shouldRestoreFocus, ownerState } = usePicker<
@@ -65,11 +65,6 @@ export const useDesktopRangePicker = <
     autoFocusView: fieldType === 'single-input',
     localeText,
   });
-
-  // Temporary hack to hide the opening button on the range pickers until we have migrate them to the new opening logic.
-  if (fieldType === 'multi-input') {
-    providerProps.contextValue.triggerStatus = 'hidden';
-  }
 
   const Field = slots.field;
 
