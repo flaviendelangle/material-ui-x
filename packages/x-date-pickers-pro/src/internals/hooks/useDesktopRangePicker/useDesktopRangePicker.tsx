@@ -36,8 +36,7 @@ export const useDesktopRangePicker = <
 }: UseDesktopRangePickerParams<TView, TEnableAccessibleFieldDOMStructure, TExternalProps>) => {
   useLicenseVerifier('x-date-pickers-pro', releaseInfo);
 
-  const { slots, slotProps, className, sx, inputRef, name, label, localeText, reduceAnimations } =
-    props;
+  const { slots, slotProps, inputRef, localeText, reduceAnimations } = props;
 
   const fieldType = (slots.field as any).fieldType ?? 'multi-input';
   const rangePositionResponse = useRangePosition(props);
@@ -59,16 +58,6 @@ export const useDesktopRangePicker = <
   const fieldProps: RangePickerPropsForFieldSlot<boolean> = useSlotProps({
     elementType: Field,
     externalSlotProps: slotProps?.field,
-    additionalProps: {
-      // Forwarded props
-      className,
-      sx,
-      ...(fieldType === 'single-input' && {
-        ...(!!inputRef && { inputRef }),
-        name,
-        label,
-      }),
-    },
     ownerState,
   });
 
@@ -76,7 +65,7 @@ export const useDesktopRangePicker = <
 
   const renderPicker = () => (
     <PickerProvider {...providerProps}>
-      <PickerFieldUIContextProvider slots={slots} slotProps={slotProps}>
+      <PickerFieldUIContextProvider slots={slots} slotProps={slotProps} inputRef={inputRef}>
         <PickerRangePositionContext.Provider value={rangePositionResponse}>
           <Field {...fieldProps} />
           <PickersPopper

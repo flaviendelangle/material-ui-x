@@ -28,16 +28,7 @@ export const useMobilePicker = <
   props,
   ...pickerParams
 }: UseMobilePickerParams<TView, TEnableAccessibleFieldDOMStructure, TExternalProps>) => {
-  const {
-    slots,
-    slotProps: innerSlotProps,
-    className,
-    sx,
-    name,
-    label,
-    inputRef,
-    localeText,
-  } = props;
+  const { slots, slotProps: innerSlotProps, label, inputRef, localeText } = props;
 
   const labelId = useId();
   const isToolbarHidden = innerSlotProps?.toolbar?.hidden ?? false;
@@ -60,12 +51,7 @@ export const useMobilePicker = <
     externalSlotProps: innerSlotProps?.field,
     additionalProps: {
       // Forwarded props
-      className,
-      sx,
-      label,
-      name,
       ...(isToolbarHidden && { id: labelId }),
-      ...(!!inputRef && { inputRef }),
     },
     ownerState,
   });
@@ -94,7 +80,7 @@ export const useMobilePicker = <
 
   const renderPicker = () => (
     <PickerProvider {...providerProps}>
-      <PickerFieldUIContextProvider slots={slots} slotProps={slotProps}>
+      <PickerFieldUIContextProvider slots={slots} slotProps={slotProps} inputRef={inputRef}>
         <Field {...fieldProps} />
         <PickersModalDialog slots={slots} slotProps={slotProps}>
           <Layout {...slotProps?.layout} slots={slots} slotProps={slotProps}>

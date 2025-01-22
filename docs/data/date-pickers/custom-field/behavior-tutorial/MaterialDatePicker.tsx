@@ -45,6 +45,10 @@ function CustomDateField(props: DatePickerFieldProps) {
       onChange={handleChange}
       error={hasValidationError}
       focused={pickerContext.open}
+      name={pickerContext.fieldName}
+      className={pickerContext.fieldClassName}
+      sx={pickerContext.fieldSx}
+      label={pickerContext.fieldLabel}
     />
   );
 }

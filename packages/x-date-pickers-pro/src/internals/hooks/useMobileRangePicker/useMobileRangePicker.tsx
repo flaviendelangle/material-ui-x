@@ -39,16 +39,7 @@ export const useMobileRangePicker = <
 }: UseMobileRangePickerParams<TView, TEnableAccessibleFieldDOMStructure, TExternalProps>) => {
   useLicenseVerifier('x-date-pickers-pro', releaseInfo);
 
-  const {
-    slots,
-    slotProps: innerSlotProps,
-    className,
-    sx,
-    label,
-    inputRef,
-    name,
-    localeText,
-  } = props;
+  const { slots, slotProps: innerSlotProps, label, inputRef, localeText } = props;
 
   const fieldType = (slots.field as any).fieldType ?? 'multi-input';
   const rangePositionResponse = useRangePosition(props);
@@ -72,13 +63,7 @@ export const useMobileRangePicker = <
     elementType: Field,
     externalSlotProps: innerSlotProps?.field,
     additionalProps: {
-      // Forwarded props
-      className,
-      sx,
       ...(fieldType === 'single-input' && {
-        ...(!!inputRef && { inputRef }),
-        name,
-        label,
         id: labelId,
       }),
     },
@@ -126,7 +111,7 @@ export const useMobileRangePicker = <
 
   const renderPicker = () => (
     <PickerProvider {...providerProps}>
-      <PickerFieldUIContextProvider slots={slots} slotProps={slotProps}>
+      <PickerFieldUIContextProvider slots={slots} slotProps={slotProps} inputRef={inputRef}>
         <PickerRangePositionContext.Provider value={rangePositionResponse}>
           <Field {...fieldProps} />
           <PickersModalDialog slots={slots} slotProps={slotProps}>
