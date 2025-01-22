@@ -7,7 +7,11 @@ import Typography from '@mui/material/Typography';
 import { styled, useThemeProps } from '@mui/material/styles';
 import composeClasses from '@mui/utils/composeClasses';
 import useSlotProps from '@mui/utils/useSlotProps';
-import { cleanFieldResponse, useFieldOwnerState, PickerFieldUIContext } from '@mui/x-date-pickers/internals';
+import {
+  cleanFieldResponse,
+  useFieldOwnerState,
+  PickerFieldUIContext,
+} from '@mui/x-date-pickers/internals';
 import { useSplitFieldProps } from '@mui/x-date-pickers/hooks';
 import { PickersTextField } from '@mui/x-date-pickers/PickersTextField';
 import {
@@ -78,7 +82,7 @@ export function createMultiInputRangeField<TManager extends PickerAnyRangeManage
 
     const classes = useUtilityClasses(classesProp);
     const ownerState = useFieldOwnerState(internalProps as any);
-  const pickerFieldUIContext = React.useContext(PickerFieldUIContext);
+    const pickerFieldUIContext = React.useContext(PickerFieldUIContext);
 
     const Root = slots?.root ?? MultiInputRangeFieldRoot;
     const rootProps = useSlotProps({
@@ -118,7 +122,8 @@ export function createMultiInputRangeField<TManager extends PickerAnyRangeManage
     const cleanEndTextFieldResponse = cleanFieldResponse(fieldResponse.endTextField);
 
     const TextField =
-      slots?.textField ?? pickerFieldUIContext.slots.textField ??
+      slots?.textField ??
+      pickerFieldUIContext.slots.textField ??
       (fieldResponse.enableAccessibleFieldDOMStructure === false ? MuiTextField : PickersTextField);
 
     return (
