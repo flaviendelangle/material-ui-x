@@ -79,14 +79,18 @@ const JoyMultiInputDateRangeField = React.forwardRef((props, ref) => {
   const startTextFieldProps = useSlotProps({
     elementType: 'input',
     externalSlotProps: slotProps?.textField,
+    additionalProps: { label: 'Start' },
     ownerState: { position: 'start' },
   });
 
   const endTextFieldProps = useSlotProps({
     elementType: 'input',
     externalSlotProps: slotProps?.textField,
+    additionalProps: { label: 'End' },
     ownerState: { position: 'end' },
   });
+
+  console.log(endTextFieldProps);
 
   const fieldResponse = useMultiInputRangeField({
     manager,

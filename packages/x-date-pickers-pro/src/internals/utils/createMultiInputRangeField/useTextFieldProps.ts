@@ -79,6 +79,8 @@ export function useTextFieldProps({
     ownerState: { ...ownerState, position },
   });
 
+  console.log(textFieldProps);
+
   if (!textFieldProps.InputProps) {
     textFieldProps.InputProps = {};
   }
