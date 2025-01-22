@@ -9,6 +9,8 @@ export {
   PickerFieldUIContextProvider,
   cleanFieldResponse,
   useFieldTextFieldProps,
+  PickerFieldUIContext,
+  mergeSlotProps,
 } from './components/PickerFieldUI';
 export type {
   ExportedPickerFieldUIProps,

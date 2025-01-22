@@ -82,7 +82,7 @@ export const cleanFieldResponse = <
   };
 };
 
-const PickerFieldUIContext = React.createContext<PickerFieldUIContextValue>({
+export const PickerFieldUIContext = React.createContext<PickerFieldUIContextValue>({
   slots: {},
   slotProps: {},
   inputRef: undefined,
@@ -388,7 +388,7 @@ interface PickerFieldUIContextValue {
   slotProps: PickerFieldUISlotPropsFromContext;
 }
 
-function mergeSlotProps<TProps extends {}, TOwnerState extends FieldOwnerState>(
+export function mergeSlotProps<TProps extends {}, TOwnerState extends FieldOwnerState>(
   slotPropsA: SlotComponentPropsFromProps<TProps, {}, TOwnerState> | undefined,
   slotPropsB: SlotComponentPropsFromProps<TProps, {}, TOwnerState> | undefined,
 ) {

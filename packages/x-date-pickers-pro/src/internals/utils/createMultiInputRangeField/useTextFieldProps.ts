@@ -4,9 +4,11 @@ import useEventCallback from '@mui/utils/useEventCallback';
 import { PickersTextField, PickersTextFieldProps } from '@mui/x-date-pickers/PickersTextField';
 import { usePickerTranslations } from '@mui/x-date-pickers/hooks';
 import {
+  PickerFieldUIContext,
   PickerValue,
   RangePosition,
   useNullablePickerContext,
+  mergeSlotProps,
 } from '@mui/x-date-pickers/internals';
 import { FieldOwnerState, FieldRef } from '@mui/x-date-pickers/models';
 import { MultiInputRangeFieldSlotProps } from './createMultiInputRangeField.types';
@@ -24,6 +26,7 @@ export function useTextFieldProps({
   const pickerContext = useNullablePickerContext();
   const translations = usePickerTranslations();
   const rangePositionContext = useNullablePickerRangePositionContext();
+  const pickerFieldUIContext = React.useContext(PickerFieldUIContext);
   const rangePosition = rangePositionContext?.rangePosition ?? 'start';
   const setRangePosition = rangePositionContext?.setRangePosition;
 
@@ -66,7 +69,10 @@ export function useTextFieldProps({
 
   const textFieldProps: PickersTextFieldProps = useSlotProps({
     elementType: PickersTextField,
-    externalSlotProps: slotProps?.textField,
+    externalSlotProps: mergeSlotProps(
+      pickerFieldUIContext.slotProps.textField as any,
+      slotProps?.textField as any,
+    ),
     additionalProps: {
       onKeyDown: handleKeyDown,
       onClick: handleClick,
@@ -78,8 +84,6 @@ export function useTextFieldProps({
     },
     ownerState: { ...ownerState, position },
   });
-
-  console.log(textFieldProps);
 
   if (!textFieldProps.InputProps) {
     textFieldProps.InputProps = {};
