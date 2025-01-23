@@ -63,9 +63,6 @@ const BrowserTextField = React.forwardRef(
       onChange,
       value,
 
-      // Can be used to render a custom label
-      label,
-
       // Can be used to style the component
       areAllSectionsEmpty,
       disabled,
@@ -139,21 +136,26 @@ const BrowserMultiInputDateRangeField = React.forwardRef(
     const fieldResponse = useMultiInputRangeField({
       manager,
       internalProps,
-      startForwardedProps: startTextFieldProps,
-      endForwardedProps: endTextFieldProps,
+      startTextFieldProps,
+      endTextFieldProps,
+      rootProps: {
+        spacing: 2,
+        direction: 'row' as const,
+        overflow: 'auto',
+        ...otherForwardedProps,
+        ref,
+      },
     });
 
     return (
-      <Stack
-        ref={ref}
-        spacing={2}
-        direction="row"
-        overflow="auto"
-        {...otherForwardedProps}
-      >
-        <BrowserTextField {...(fieldResponse.startDate as BrowserTextFieldProps)} />
+      <Stack {...fieldResponse.root}>
+        <BrowserTextField
+          {...(fieldResponse.startTextField as BrowserTextFieldProps)}
+        />
         <span>–</span>
-        <BrowserTextField {...(fieldResponse.endDate as BrowserTextFieldProps)} />
+        <BrowserTextField
+          {...(fieldResponse.endTextField as BrowserTextFieldProps)}
+        />
       </Stack>
     );
   },

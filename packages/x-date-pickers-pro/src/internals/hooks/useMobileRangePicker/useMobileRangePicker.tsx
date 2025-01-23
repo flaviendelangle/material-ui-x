@@ -12,7 +12,6 @@ import {
   PickerFieldUIContextProvider,
 } from '@mui/x-date-pickers/internals';
 import { usePickerTranslations } from '@mui/x-date-pickers/hooks';
-import { InferError } from '@mui/x-date-pickers/models';
 import useId from '@mui/utils/useId';
 import {
   UseMobileRangePickerParams,
@@ -40,18 +39,7 @@ export const useMobileRangePicker = <
 }: UseMobileRangePickerParams<TView, TEnableAccessibleFieldDOMStructure, TExternalProps>) => {
   useLicenseVerifier('x-date-pickers-pro', releaseInfo);
 
-  const {
-    slots,
-    slotProps: innerSlotProps,
-    className,
-    sx,
-    label,
-    inputRef,
-    name,
-    readOnly,
-    autoFocus,
-    localeText,
-  } = props;
+  const { slots, slotProps: innerSlotProps, label, inputRef, localeText } = props;
 
   const fieldType = (slots.field as any).fieldType ?? 'multi-input';
   const rangePositionResponse = useRangePosition(props);
@@ -70,31 +58,13 @@ export const useMobileRangePicker = <
     localeText,
   });
 
-  // Temporary hack to hide the opening button on the range pickers until we have migrate them to the new opening logic.
-  providerProps.contextValue.triggerStatus = 'hidden';
-
   const Field = slots.field;
-  const fieldProps: RangePickerPropsForFieldSlot<
-    boolean,
-    TEnableAccessibleFieldDOMStructure,
-    InferError<TExternalProps>
-  > = useSlotProps({
+  const fieldProps: RangePickerPropsForFieldSlot<boolean> = useSlotProps({
     elementType: Field,
     externalSlotProps: innerSlotProps?.field,
     additionalProps: {
-      // Internal props
-      readOnly,
-      autoFocus: autoFocus && !props.open,
-
-      // Forwarded props
-      className,
-      sx,
       ...(fieldType === 'single-input' && {
-        ...(!!inputRef && { inputRef }),
-        name,
-        label,
         id: labelId,
-        focused: providerProps.contextValue.open ? true : undefined,
       }),
     },
     ownerState,
@@ -141,7 +111,7 @@ export const useMobileRangePicker = <
 
   const renderPicker = () => (
     <PickerProvider {...providerProps}>
-      <PickerFieldUIContextProvider slots={slots} slotProps={slotProps}>
+      <PickerFieldUIContextProvider slots={slots} slotProps={slotProps} inputRef={inputRef}>
         <PickerRangePositionContext.Provider value={rangePositionResponse}>
           <Field {...fieldProps} />
           <PickersModalDialog slots={slots} slotProps={slotProps}>

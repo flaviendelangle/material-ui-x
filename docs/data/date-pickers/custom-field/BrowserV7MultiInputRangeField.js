@@ -43,8 +43,6 @@ const BrowserTextField = React.forwardRef((props, ref) => {
     // Can be passed to a hidden <input /> element
     onChange,
     value,
-    // Can be used to render a custom label
-    label,
     // Can be used to style the component
     areAllSectionsEmpty,
     disabled,
@@ -99,21 +97,22 @@ const BrowserMultiInputDateRangeField = React.forwardRef((props, ref) => {
   const fieldResponse = useMultiInputRangeField({
     manager,
     internalProps,
-    startForwardedProps: startTextFieldProps,
-    endForwardedProps: endTextFieldProps,
+    startTextFieldProps,
+    endTextFieldProps,
+    rootProps: {
+      spacing: 2,
+      direction: 'row',
+      overflow: 'auto',
+      ...otherForwardedProps,
+      ref,
+    },
   });
 
   return (
-    <Stack
-      ref={ref}
-      spacing={2}
-      direction="row"
-      overflow="auto"
-      {...otherForwardedProps}
-    >
-      <BrowserTextField {...fieldResponse.startDate} />
+    <Stack {...fieldResponse.root}>
+      <BrowserTextField {...fieldResponse.startTextField} />
       <span>–</span>
-      <BrowserTextField {...fieldResponse.endDate} />
+      <BrowserTextField {...fieldResponse.endTextField} />
     </Stack>
   );
 });

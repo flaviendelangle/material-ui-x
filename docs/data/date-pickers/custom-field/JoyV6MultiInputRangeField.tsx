@@ -97,7 +97,7 @@ const JoyField = React.forwardRef(
 
 interface JoyMultiInputDateRangeFieldProps
   extends Omit<
-      DateRangePickerFieldProps<false>,
+      DateRangePickerFieldProps,
       'unstableFieldRef' | 'clearable' | 'onClear'
     >,
     MultiInputFieldRefs {
@@ -121,36 +121,41 @@ const JoyMultiInputDateRangeField = React.forwardRef(
     const startTextFieldProps = useSlotProps({
       elementType: 'input',
       externalSlotProps: slotProps?.textField,
+      additionalProps: { label: 'Start' },
       ownerState: { position: 'start' } as any,
     }) as MultiInputFieldSlotTextFieldProps;
 
     const endTextFieldProps = useSlotProps({
       elementType: 'input',
       externalSlotProps: slotProps?.textField,
+      additionalProps: { label: 'End' },
       ownerState: { position: 'end' } as any,
     }) as MultiInputFieldSlotTextFieldProps;
+
+    console.log(endTextFieldProps);
 
     const fieldResponse = useMultiInputRangeField({
       manager,
       internalProps: { ...internalProps, enableAccessibleFieldDOMStructure: false },
-      startForwardedProps: startTextFieldProps,
-      endForwardedProps: endTextFieldProps,
+      rootProps: {
+        ref,
+        spacing: 2,
+        overflow: 'auto',
+        direction: 'row' as const,
+        alignItems: 'center',
+        ...otherForwardedProps,
+      },
+      startTextFieldProps,
+      endTextFieldProps,
     });
 
     return (
-      <Stack
-        ref={ref}
-        spacing={2}
-        overflow="auto"
-        direction="row"
-        alignItems="center"
-        {...otherForwardedProps}
-      >
-        <JoyField {...fieldResponse.startDate} />
+      <Stack {...fieldResponse.root}>
+        <JoyField {...fieldResponse.startTextField} />
         <FormControl>
           <Typography sx={{ marginTop: '25px' }}>{' – '}</Typography>
         </FormControl>
-        <JoyField {...fieldResponse.endDate} />
+        <JoyField {...fieldResponse.endTextField} />
       </Stack>
     );
   },

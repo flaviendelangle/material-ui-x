@@ -42,7 +42,6 @@ export const useStaticRangePicker = <
     ...pickerParams,
     props,
     autoFocusView: autoFocus ?? false,
-    fieldRef: undefined,
     localeText,
     variant: displayStaticWrapperAs,
   });

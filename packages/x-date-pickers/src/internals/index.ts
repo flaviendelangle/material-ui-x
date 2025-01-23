@@ -9,6 +9,8 @@ export {
   PickerFieldUIContextProvider,
   cleanFieldResponse,
   useFieldTextFieldProps,
+  PickerFieldUIContext,
+  mergeSlotProps,
 } from './components/PickerFieldUI';
 export type {
   ExportedPickerFieldUIProps,
@@ -76,7 +78,6 @@ export type {
   FieldValueManager,
   FieldChangeHandler,
   FieldChangeHandlerContext,
-  PickerFieldPrivateContextValue,
 } from './hooks/useField';
 export { useFieldOwnerState } from './hooks/useFieldOwnerState';
 export type { MobileOnlyPickerProps } from './hooks/useMobilePicker';

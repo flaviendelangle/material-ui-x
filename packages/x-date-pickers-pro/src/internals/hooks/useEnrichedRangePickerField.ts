@@ -5,7 +5,7 @@ import { SlotComponentProps } from '@mui/utils';
 import { SlotComponentPropsFromProps } from '@mui/x-internals/types';
 import { PickerOwnerState, FieldOwnerState } from '@mui/x-date-pickers/models';
 import { UseClearableFieldSlots, UseClearableFieldSlotProps } from '@mui/x-date-pickers/hooks';
-import { BaseSingleInputFieldProps, PickerRangeValue } from '@mui/x-date-pickers/internals';
+import { BaseSingleInputFieldProps } from '@mui/x-date-pickers/internals';
 import { PickersTextField } from '@mui/x-date-pickers/PickersTextField';
 import { RangePosition, PickerRangeFieldSlotProps } from '../../models';
 import { BaseMultiInputFieldProps } from '../models/fields';
@@ -46,14 +46,6 @@ export interface RangePickerFieldSlotProps<TEnableAccessibleFieldDOMStructure ex
   >;
 }
 
-export type RangePickerPropsForFieldSlot<
-  TIsSingleInput extends boolean,
-  TEnableAccessibleFieldDOMStructure extends boolean,
-  TError,
-> =
-  | (TIsSingleInput extends true
-      ? BaseSingleInputFieldProps<PickerRangeValue, TEnableAccessibleFieldDOMStructure, TError>
-      : never)
-  | (TIsSingleInput extends false
-      ? BaseMultiInputFieldProps<TEnableAccessibleFieldDOMStructure, TError>
-      : never);
+export type RangePickerPropsForFieldSlot<TIsSingleInput extends boolean> =
+  | (TIsSingleInput extends true ? BaseSingleInputFieldProps : never)
+  | (TIsSingleInput extends false ? BaseMultiInputFieldProps : never);

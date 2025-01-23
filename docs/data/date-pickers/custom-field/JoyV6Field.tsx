@@ -33,7 +33,7 @@ const CalendarIcon = createSvgIcon(
 const joyTheme = extendJoyTheme();
 
 const JoyDateField = React.forwardRef(
-  (props: DatePickerFieldProps<false>, ref: React.Ref<HTMLDivElement>) => {
+  (props: DatePickerFieldProps, ref: React.Ref<HTMLDivElement>) => {
     const fieldResponse = useDateField<false, typeof props>(props);
 
     const {
@@ -47,13 +47,9 @@ const JoyDateField = React.forwardRef(
       onClear,
       clearable,
 
-      // Can be used to render a custom label
-      label,
-
       // Can be used to style the component
       disabled,
       readOnly,
-      focused,
       error,
       inputRef,
 
@@ -66,7 +62,7 @@ const JoyDateField = React.forwardRef(
 
     return (
       <FormControl disabled={disabled} id={id} ref={ref}>
-        <FormLabel>{label}</FormLabel>
+        <FormLabel>{pickerContext.fieldLabel}</FormLabel>
         <Input
           ref={pickerContext.triggerRef}
           disabled={disabled}

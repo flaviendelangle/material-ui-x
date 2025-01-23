@@ -1,30 +1,36 @@
 import * as React from 'react';
 import useSlotProps from '@mui/utils/useSlotProps';
 import useEventCallback from '@mui/utils/useEventCallback';
-import useForkRef from '@mui/utils/useForkRef';
 import { PickersTextField, PickersTextFieldProps } from '@mui/x-date-pickers/PickersTextField';
 import { usePickerTranslations } from '@mui/x-date-pickers/hooks';
 import {
+  PickerFieldUIContext,
   PickerValue,
   RangePosition,
   useNullablePickerContext,
+  mergeSlotProps,
 } from '@mui/x-date-pickers/internals';
 import { FieldOwnerState, FieldRef } from '@mui/x-date-pickers/models';
 import { MultiInputRangeFieldSlotProps } from './createMultiInputRangeField.types';
-import { usePickerRangePositionContext } from '../../../hooks';
+import { useNullablePickerRangePositionContext } from '../../hooks/useNullablePickerRangePositionContext';
 
-export function useTextFieldProps(
-  slotProps: MultiInputRangeFieldSlotProps | undefined,
-  ownerState: FieldOwnerState,
-  position: 'start' | 'end',
-  fieldRefProp: React.Ref<FieldRef<PickerValue>> | undefined,
-) {
+export function useTextFieldProps({
+  slotProps,
+  ownerState,
+  position,
+}: {
+  slotProps: MultiInputRangeFieldSlotProps | undefined;
+  ownerState: FieldOwnerState;
+  position: 'start' | 'end';
+}): PickersTextFieldProps {
   const pickerContext = useNullablePickerContext();
   const translations = usePickerTranslations();
-  const { rangePosition, onRangePositionChange } = usePickerRangePositionContext();
+  const rangePositionContext = useNullablePickerRangePositionContext();
+  const pickerFieldUIContext = React.useContext(PickerFieldUIContext);
+  const rangePosition = rangePositionContext?.rangePosition ?? 'start';
+  const setRangePosition = rangePositionContext?.setRangePosition;
 
   const fieldRef = React.useRef<FieldRef<PickerValue>>(null);
-  const handleFieldRef = useForkRef(fieldRefProp, fieldRef);
   const previousRangePosition = React.useRef<RangePosition>(rangePosition);
 
   const openPickerIfPossible = (event: React.UIEvent) => {
@@ -33,7 +39,7 @@ export function useTextFieldProps(
     }
 
     event.stopPropagation();
-    onRangePositionChange(position);
+    setRangePosition?.(position);
     if (pickerContext.triggerStatus === 'enabled') {
       event.preventDefault();
       pickerContext.setOpen(true);
@@ -54,7 +60,7 @@ export function useTextFieldProps(
 
   const handleFocus = useEventCallback(() => {
     if (pickerContext?.open) {
-      onRangePositionChange(position);
+      setRangePosition?.(position);
       if (previousRangePosition.current !== position && pickerContext.initialView) {
         pickerContext.setView?.(pickerContext.initialView);
       }
@@ -63,13 +69,17 @@ export function useTextFieldProps(
 
   const textFieldProps: PickersTextFieldProps = useSlotProps({
     elementType: PickersTextField,
-    externalSlotProps: slotProps?.textField,
+    externalSlotProps: mergeSlotProps(
+      pickerFieldUIContext.slotProps.textField as any,
+      slotProps?.textField as any,
+    ),
     additionalProps: {
       onKeyDown: handleKeyDown,
       onClick: handleClick,
       onFocus: handleFocus,
-      label: translations[position],
-      focused: pickerContext?.open ? rangePosition === position : undefined,
+      // TODO: Decide if we also want to set the default labels on standalone fields.
+      label: pickerContext ? translations[position] : undefined,
+      focused: pickerContext?.open ? rangePosition === position : false,
       ...(pickerContext?.variant === 'mobile' && { readOnly: true }),
     },
     ownerState: { ...ownerState, position },
@@ -109,5 +119,5 @@ export function useTextFieldProps(
     pickerContext?.view,
   ]);
 
-  return { textFieldProps, fieldRef: handleFieldRef };
+  return textFieldProps;
 }

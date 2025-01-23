@@ -127,12 +127,17 @@ export function usePickerProvider<
       ...paramsFromUsePickerViews.contextValue,
       disabled: props.disabled ?? false,
       readOnly: props.readOnly ?? false,
+      autoFocus: props.autoFocus ?? false,
       variant,
       orientation,
+      popupRef,
       triggerRef,
       triggerStatus,
       fieldFormat: props.format ?? '',
-      popupRef,
+      fieldClassName: props.className,
+      fieldName: props.name,
+      fieldLabel: props.label,
+      fieldSx: props.sx,
     }),
     [
       paramsFromUsePickerValue.contextValue,
@@ -141,9 +146,13 @@ export function usePickerProvider<
       orientation,
       props.disabled,
       props.readOnly,
-      triggerRef,
-      triggerStatus,
+      props.autoFocus,
       props.format,
+      props.className,
+      props.name,
+      props.label,
+      props.sx,
+      triggerStatus,
     ],
   );
 
@@ -235,4 +244,16 @@ export interface UsePickerProviderNonStaticProps
    * @default false
    */
   disableOpenPicker?: boolean;
+  /**
+   * The label content.
+   */
+  label?: React.ReactNode;
+  /**
+   * Pass a ref to the `input` element.
+   */
+  inputRef?: React.Ref<HTMLInputElement>;
+  /**
+   * Name attribute used by the `input` element in the Field.
+   */
+  name?: string;
 }

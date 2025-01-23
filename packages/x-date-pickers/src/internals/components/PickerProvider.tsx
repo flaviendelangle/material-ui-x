@@ -1,4 +1,7 @@
 import * as React from 'react';
+import { SxProps } from '@mui/system';
+import { Theme } from '@mui/material/styles';
+
 import { PickerOwnerState } from '../../models';
 import { PickersInputLocaleText } from '../../locales';
 import { LocalizationProvider } from '../../LocalizationProvider';
@@ -102,6 +105,12 @@ export interface PickerContextValue<
    */
   readOnly: boolean;
   /**
+   * `true` if the picker should be focused on mount.
+   * If the picker has a field and is not open, the field should be focused.
+   * If the picker does not have a field (if it is a static picker) or is not open, the view should be focused.
+   */
+  autoFocus: boolean;
+  /**
    * The responsive variant of the picker.
    * Is equal to "desktop" when using a desktop picker (like <DesktopDatePicker />).
    * Is equal to "mobile" when using a mobile picker (like <MobileDatePicker />).
@@ -118,6 +127,11 @@ export interface PickerContextValue<
    * Is always equal to "portrait" if the component you are accessing the context from is not wrapped by a picker.
    */
   orientation: PickerOrientation;
+  /**
+   * The ref that should be attached to the element that outermost element of the popup that contain the view if any.
+   * When using a built-in field component, this property is automatically handled.
+   */
+  popupRef: React.RefObject<any>;
   /**
    * The ref that should be attached to the element that triggers the Picker opening.
    * When using a built-in field component, this property is automatically handled.
@@ -139,10 +153,33 @@ export interface PickerContextValue<
    */
   fieldFormat: string;
   /**
-   * The ref that should be attached to the element that outermost element of the popup that contain the view if any.
-   * When using a built-in field component, this property is automatically handled.
+   * Name that should be applied to the <input /> element of the field.
+   * Is equal to `props.name` on the picker component if defined.
+   * Is equal to undefined if the picker does not have a field (static pickers).
+   * Is always equal to undefined if the component you are accessing the context from is not wrapped by a picker.
    */
-  popupRef: React.RefObject<any>;
+  fieldName: string | undefined;
+  /**
+   * Label that should be applied to the field.
+   * Is equal to `props.label` on the picker component if defined.
+   * Is equal to undefined if the picker does not have a field (static pickers).
+   * Is always equal to undefined if the component you are accessing the context from is not wrapped by a picker.
+   */
+  fieldLabel: React.ReactNode | undefined;
+  /**
+   * Class name that should be applied to the field.
+   * Is equal to `props.className` on the picker component if defined.
+   * Is equal to undefined if the picker does not have a field (static pickers).
+   * Is always equal to undefined if the component you are accessing the context from is not wrapped by a picker.
+   */
+  fieldClassName: string | undefined;
+  /**
+   * MUI style prop that should be applied to the field.
+   * Is equal to `props.sx` on the picker component if defined.
+   * Is equal to undefined if the picker does not have a field (static pickers).
+   * Is always equal to undefined if the component you are accessing the context from is not wrapped by a picker.
+   */
+  fieldSx: SxProps<Theme> | undefined;
 }
 
 export interface PickerActionsContextValue<

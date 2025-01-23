@@ -5,7 +5,6 @@ import { PickersPopper } from '../../components/PickersPopper';
 import { UseDesktopPickerParams, UseDesktopPickerProps } from './useDesktopPicker.types';
 import { usePicker } from '../usePicker';
 import { PickersLayout } from '../../../PickersLayout';
-import { InferError } from '../../../models';
 import { DateOrTimeViewWithMeridiem, BaseSingleInputFieldProps, PickerValue } from '../../models';
 import { PickerProvider } from '../../components/PickerProvider';
 import { PickerFieldUIContextProvider } from '../../components/PickerFieldUI';
@@ -29,19 +28,7 @@ export const useDesktopPicker = <
   props,
   ...pickerParams
 }: UseDesktopPickerParams<TView, TEnableAccessibleFieldDOMStructure, TExternalProps>) => {
-  const {
-    slots,
-    slotProps: innerSlotProps,
-    className,
-    sx,
-    name,
-    label,
-    inputRef,
-    readOnly,
-    autoFocus,
-    localeText,
-    reduceAnimations,
-  } = props;
+  const { slots, slotProps: innerSlotProps, label, inputRef, localeText, reduceAnimations } = props;
 
   const labelId = useId();
   const isToolbarHidden = innerSlotProps?.toolbar?.hidden ?? false;
@@ -59,26 +46,12 @@ export const useDesktopPicker = <
   });
 
   const Field = slots.field;
-  const fieldProps: BaseSingleInputFieldProps<
-    PickerValue,
-    TEnableAccessibleFieldDOMStructure,
-    InferError<TExternalProps>
-  > = useSlotProps({
+  const fieldProps: BaseSingleInputFieldProps = useSlotProps({
     elementType: Field,
     externalSlotProps: innerSlotProps?.field,
     additionalProps: {
-      // Internal props
-      readOnly,
-      autoFocus: autoFocus && !props.open,
-
       // Forwarded props
-      className,
-      sx,
-      label,
-      name,
-      focused: providerProps.contextValue.open ? true : undefined,
       ...(isToolbarHidden && { id: labelId }),
-      ...(!!inputRef && { inputRef }),
     },
     ownerState,
   });
@@ -107,7 +80,7 @@ export const useDesktopPicker = <
 
   const renderPicker = () => (
     <PickerProvider {...providerProps}>
-      <PickerFieldUIContextProvider slots={slots} slotProps={slotProps}>
+      <PickerFieldUIContextProvider slots={slots} slotProps={slotProps} inputRef={inputRef}>
         <Field {...fieldProps} />
         <PickersPopper
           role="dialog"

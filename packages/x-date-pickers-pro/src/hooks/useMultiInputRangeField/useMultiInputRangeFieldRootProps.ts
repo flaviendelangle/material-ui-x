@@ -8,6 +8,9 @@ import {
   usePickerPrivateContext,
 } from '@mui/x-date-pickers/internals';
 
+/**
+ * @ignore - internal hook.
+ */
 export function useMultiInputRangeFieldRootProps<TForwardedProps extends { [key: string]: any }>(
   forwardedProps: TForwardedProps,
 ): UseMultiInputRangeFieldRootPropsReturnValue<TForwardedProps> {
@@ -40,5 +43,5 @@ export type UseMultiInputRangeFieldRootPropsReturnValue<
   TForwardedProps extends { [key: string]: any },
 > = Omit<TForwardedProps, 'onBlur' | 'ref'> & {
   onBlur: () => void;
-  ref: React.Ref<HTMLElement>;
+  ref: React.Ref<HTMLDivElement>;
 };
