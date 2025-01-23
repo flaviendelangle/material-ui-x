@@ -1,4 +1,4 @@
-import type { FieldSection, PickerOwnerState } from '../../models';
+import type { FieldSection } from '../../models';
 import { RangePosition } from './pickers';
 
 export interface FieldRangeSection extends FieldSection {
@@ -11,5 +11,4 @@ export interface FieldRangeSection extends FieldSection {
  */
 export interface BaseSingleInputFieldProps {
   id?: string;
-  ownerState: PickerOwnerState;
 }

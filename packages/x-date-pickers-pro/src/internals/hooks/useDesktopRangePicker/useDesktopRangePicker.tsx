@@ -14,7 +14,6 @@ import {
   UseDesktopRangePickerParams,
   UseDesktopRangePickerProps,
 } from './useDesktopRangePicker.types';
-import { RangePickerPropsForFieldSlot } from '../useEnrichedRangePickerField';
 import { getReleaseInfo } from '../../utils/releaseInfo';
 import { useRangePosition } from '../useRangePosition';
 import { PickerRangePositionContext } from '../../../hooks/usePickerRangePositionContext';
@@ -55,7 +54,7 @@ export const useDesktopRangePicker = <
 
   const Field = slots.field;
 
-  const fieldProps: RangePickerPropsForFieldSlot<boolean> = useSlotProps({
+  const { ownerState: fieldOwnerState, ...fieldProps } = useSlotProps({
     elementType: Field,
     externalSlotProps: slotProps?.field,
     ownerState,

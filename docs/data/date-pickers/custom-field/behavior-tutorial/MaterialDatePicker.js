@@ -41,10 +41,10 @@ function CustomDateField(props) {
       onChange={handleChange}
       error={hasValidationError}
       focused={pickerContext.open}
+      label={pickerContext.fieldLabel}
       name={pickerContext.fieldName}
       className={pickerContext.fieldClassName}
       sx={pickerContext.fieldSx}
-      label={pickerContext.fieldLabel}
     />
   );
 }

@@ -18,7 +18,6 @@ import {
 
 function ButtonDateRangeField(props: DateRangePickerFieldProps) {
   const { internalProps, forwardedProps } = useSplitFieldProps(props, 'date');
-  const { ownerState, ...other } = forwardedProps;
 
   const pickerContext = usePickerContext();
   const parsedFormat = useParsedFormat();
@@ -37,7 +36,7 @@ function ButtonDateRangeField(props: DateRangePickerFieldProps) {
 
   return (
     <Button
-      {...other}
+      {...forwardedProps}
       variant="outlined"
       color={hasValidationError ? 'error' : 'primary'}
       ref={pickerContext.triggerRef}

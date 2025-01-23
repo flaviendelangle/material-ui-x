@@ -5,10 +5,8 @@ import { SlotComponentProps } from '@mui/utils';
 import { SlotComponentPropsFromProps } from '@mui/x-internals/types';
 import { PickerOwnerState, FieldOwnerState } from '@mui/x-date-pickers/models';
 import { UseClearableFieldSlots, UseClearableFieldSlotProps } from '@mui/x-date-pickers/hooks';
-import { BaseSingleInputFieldProps } from '@mui/x-date-pickers/internals';
 import { PickersTextField } from '@mui/x-date-pickers/PickersTextField';
 import { RangePosition, PickerRangeFieldSlotProps } from '../../models';
-import { BaseMultiInputFieldProps } from '../models/fields';
 
 export interface RangePickerFieldSlots extends UseClearableFieldSlots {
   field: React.ElementType;
@@ -45,7 +43,3 @@ export interface RangePickerFieldSlotProps<TEnableAccessibleFieldDOMStructure ex
     FieldOwnerState & { position?: RangePosition }
   >;
 }
-
-export type RangePickerPropsForFieldSlot<TIsSingleInput extends boolean> =
-  | (TIsSingleInput extends true ? BaseSingleInputFieldProps : never)
-  | (TIsSingleInput extends false ? BaseMultiInputFieldProps : never);
