@@ -337,7 +337,7 @@ export function PickersPopper(inProps: PickerPopperProps) {
     shouldRestoreFocus,
     onBlur,
     role,
-    placement = 'bottom',
+    placement = 'bottom-start',
     slots,
     slotProps,
     reduceAnimations: inReduceAnimations,
