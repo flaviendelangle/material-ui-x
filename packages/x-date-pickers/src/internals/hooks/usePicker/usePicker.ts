@@ -10,6 +10,7 @@ export const usePicker = <
   TView extends DateOrTimeViewWithMeridiem,
   TExternalProps extends UsePickerProps<TValue, TView, any, any>,
 >({
+  ref,
   props,
   valueManager,
   valueType,
@@ -43,6 +44,7 @@ export const usePicker = <
   });
 
   const providerProps = usePickerProvider({
+    ref,
     props,
     localeText,
     valueManager,

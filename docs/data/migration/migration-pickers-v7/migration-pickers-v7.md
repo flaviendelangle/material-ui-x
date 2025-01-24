@@ -472,21 +472,36 @@ If the updated values do not fit your use case, you can [override them](/x/react
   +const { disabled } = usePickerContext();
 
   -const { className } = props;
-  +const { fieldClassName } = usePickerContext();
+  +const { rootClassName } = usePickerContext();
 
   -const { sx } = props;
-  +const { fieldSx } = usePickerContext();
+  +const { rootSx } = usePickerContext();
 
   -const { label } = props;
-  +const { fieldLabel } = usePickerContext();
+  +const { label } = usePickerContext();
 
   -const { name } = props;
-  +const { fieldName } = usePickerContext();
+  +const { name } = usePickerContext();
   ```
 
   :::success
   If you are using a hook like `useDateField`, you don't have to do anything, the values from the context are automatically applied.
   :::
+
+- The component passed to the `field` slot no longer receives a `ref`.
+  You can use the `usePickerContext` hook instead:
+
+  ```tsx
+  +import { usePickerContext } from '@mui/x-date-pickers/hooks';
+
+  -const CustomField = React.forwardRef(function CustomField(props, ref) {
+  -  return <input ref={ref} />;
+  -})
+  +function CustomField(props) {
+  +  const { rootRef } = usePickerContext();
+  +  return <input ref={rootRef} />;
+  +}
+  ```
 
 - The component passed to the `field` slot no longer receives the `formatDensity`, `enableAccessibleFieldDOMStructure`, `selectedSections`, `onSelectedSectionsChange` and `inputRef` props.
   These props, formerly mirroring the picker's props, are no longer exposed.

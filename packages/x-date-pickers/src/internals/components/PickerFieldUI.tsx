@@ -1,5 +1,6 @@
 import * as React from 'react';
 import useEventCallback from '@mui/utils/useEventCallback';
+import useForkRef from '@mui/utils/useForkRef';
 import resolveComponentProps from '@mui/utils/resolveComponentProps';
 import MuiTextField, { TextFieldProps } from '@mui/material/TextField';
 import MuiIconButton, { IconButtonProps } from '@mui/material/IconButton';
@@ -205,6 +206,8 @@ export function PickerFieldUI(props: PickerFieldUIProps) {
     },
     ownerState,
   });
+
+  textFieldProps.ref = useForkRef(textFieldProps.ref, pickerContext?.rootRef);
 
   if (!textFieldProps.InputProps) {
     textFieldProps.InputProps = {};
@@ -431,10 +434,10 @@ export function useFieldTextFieldProps<
     externalForwardedProps: otherExternalForwardedProps,
     additionalProps: {
       ref,
-      sx: pickerContext?.fieldSx,
-      label: pickerContext?.fieldLabel,
-      name: pickerContext?.fieldName,
-      className: pickerContext?.fieldClassName,
+      sx: pickerContext?.rootSx,
+      label: pickerContext?.label,
+      name: pickerContext?.name,
+      className: pickerContext?.rootClassName,
       inputRef: pickerFieldUIContext.inputRef,
     },
     ownerState,

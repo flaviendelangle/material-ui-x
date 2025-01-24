@@ -34,17 +34,19 @@ function AutocompleteField(props: AutocompleteFieldProps) {
     props: internalProps,
   });
 
+  console.log(pickerContext);
+
   return (
     <Autocomplete
       {...other}
       options={options}
-      ref={pickerContext.triggerRef}
-      className={pickerContext.fieldClassName}
+      ref={pickerContext.rootRef}
+      className={pickerContext.rootClassName}
       sx={[
         { minWidth: 250 },
-        ...(Array.isArray(pickerContext.fieldSx)
-          ? pickerContext.fieldSx
-          : [pickerContext.fieldSx]),
+        ...(Array.isArray(pickerContext.rootSx)
+          ? pickerContext.rootSx
+          : [pickerContext.rootSx]),
       ]}
       renderInput={(params) => {
         const endAdornment = params.InputProps
@@ -54,10 +56,11 @@ function AutocompleteField(props: AutocompleteFieldProps) {
             {...params}
             error={hasValidationError}
             focused={pickerContext.open}
-            label={pickerContext.fieldLabel}
-            name={pickerContext.fieldName}
+            label={pickerContext.label}
+            name={pickerContext.name}
             InputProps={{
               ...params.InputProps,
+              ref: pickerContext.triggerRef,
               endAdornment: React.cloneElement(endAdornment, {
                 children: (
                   <React.Fragment>

@@ -44,14 +44,12 @@ function ButtonDateTimeField(props) {
       {...forwardedProps}
       variant="outlined"
       color={hasValidationError ? 'error' : 'primary'}
-      className={pickerContext.fieldClassName}
-      sx={pickerContext.fieldSx}
+      className={pickerContext.rootClassName}
+      sx={pickerContext.rootSx}
       ref={pickerContext.triggerRef}
       onClick={() => pickerContext.setOpen((prev) => !prev)}
     >
-      {pickerContext.fieldLabel
-        ? `${pickerContext.fieldLabel}: ${valueStr}`
-        : valueStr}
+      {pickerContext.label ? `${pickerContext.label}: ${valueStr}` : valueStr}
     </Button>
   );
 }

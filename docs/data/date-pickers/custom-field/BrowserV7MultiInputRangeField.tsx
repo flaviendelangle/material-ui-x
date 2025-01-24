@@ -1,5 +1,4 @@
 import * as React from 'react';
-import useForkRef from '@mui/utils/useForkRef';
 import useSlotProps from '@mui/utils/useSlotProps';
 import { styled } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
@@ -42,63 +41,59 @@ interface BrowserTextFieldProps
       keyof BaseMultiInputPickersTextFieldProps<true>
     > {}
 
-const BrowserTextField = React.forwardRef(
-  (props: BrowserTextFieldProps, ref: React.Ref<unknown>) => {
-    const {
-      // Should be ignored
-      enableAccessibleFieldDOMStructure,
+function BrowserTextField(props: BrowserTextFieldProps) {
+  const {
+    // Should be ignored
+    enableAccessibleFieldDOMStructure,
 
-      // Should be passed to the PickersSectionList component
-      elements,
-      sectionListRef,
-      contentEditable,
-      onFocus,
-      onBlur,
-      tabIndex,
-      onInput,
-      onPaste,
-      onKeyDown,
+    // Should be passed to the PickersSectionList component
+    elements,
+    sectionListRef,
+    contentEditable,
+    onFocus,
+    onBlur,
+    tabIndex,
+    onInput,
+    onPaste,
+    onKeyDown,
 
-      // Can be passed to a hidden <input /> element
-      onChange,
-      value,
+    // Can be passed to a hidden <input /> element
+    onChange,
+    value,
 
-      // Can be used to style the component
-      areAllSectionsEmpty,
-      disabled,
-      readOnly,
-      focused,
-      error,
+    // Can be used to style the component
+    areAllSectionsEmpty,
+    disabled,
+    readOnly,
+    focused,
+    error,
 
-      InputProps: { ref: InputPropsRef, startAdornment, endAdornment } = {},
+    InputProps: { ref, startAdornment, endAdornment } = {},
 
-      // The rest can be passed to the root element
-      ...other
-    } = props;
+    // The rest can be passed to the root element
+    ...other
+  } = props;
 
-    const handleRef = useForkRef(InputPropsRef, ref);
-
-    return (
-      <BrowserFieldRoot ref={handleRef} {...other}>
-        {startAdornment}
-        <BrowserFieldContent>
-          <PickersSectionList
-            elements={elements}
-            sectionListRef={sectionListRef}
-            contentEditable={contentEditable}
-            onFocus={onFocus}
-            onBlur={onBlur}
-            tabIndex={tabIndex}
-            onInput={onInput}
-            onPaste={onPaste}
-            onKeyDown={onKeyDown}
-          />
-        </BrowserFieldContent>
-        {endAdornment}
-      </BrowserFieldRoot>
-    );
-  },
-);
+  return (
+    <BrowserFieldRoot {...other} ref={ref}>
+      {startAdornment}
+      <BrowserFieldContent>
+        <PickersSectionList
+          elements={elements}
+          sectionListRef={sectionListRef}
+          contentEditable={contentEditable}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          tabIndex={tabIndex}
+          onInput={onInput}
+          onPaste={onPaste}
+          onKeyDown={onKeyDown}
+        />
+      </BrowserFieldContent>
+      {endAdornment}
+    </BrowserFieldRoot>
+  );
+}
 
 interface BrowserMultiInputDateRangeFieldProps
   extends Omit<
@@ -111,67 +106,57 @@ interface BrowserMultiInputDateRangeFieldProps
   };
 }
 
-type BrowserMultiInputDateRangeFieldComponent = ((
-  props: BrowserMultiInputDateRangeFieldProps & React.RefAttributes<HTMLDivElement>,
-) => React.JSX.Element) & { propTypes?: any };
+function BrowserMultiInputDateRangeField(
+  props: BrowserMultiInputDateRangeFieldProps,
+) {
+  const manager = useDateRangeManager();
+  const { internalProps, forwardedProps } = useSplitFieldProps(props, 'date');
+  const { slotProps, ...otherForwardedProps } = forwardedProps;
 
-const BrowserMultiInputDateRangeField = React.forwardRef(
-  (props: BrowserMultiInputDateRangeFieldProps, ref: React.Ref<HTMLDivElement>) => {
-    const manager = useDateRangeManager();
-    const { internalProps, forwardedProps } = useSplitFieldProps(props, 'date');
-    const { slotProps, ...otherForwardedProps } = forwardedProps;
+  const startTextFieldProps = useSlotProps({
+    elementType: 'input',
+    externalSlotProps: slotProps?.textField,
+    ownerState: { position: 'start' } as any,
+  }) as MultiInputFieldSlotTextFieldProps;
 
-    const startTextFieldProps = useSlotProps({
-      elementType: 'input',
-      externalSlotProps: slotProps?.textField,
-      ownerState: { position: 'start' } as any,
-    }) as MultiInputFieldSlotTextFieldProps;
+  const endTextFieldProps = useSlotProps({
+    elementType: 'input',
+    externalSlotProps: slotProps?.textField,
+    ownerState: { position: 'end' } as any,
+  }) as MultiInputFieldSlotTextFieldProps;
 
-    const endTextFieldProps = useSlotProps({
-      elementType: 'input',
-      externalSlotProps: slotProps?.textField,
-      ownerState: { position: 'end' } as any,
-    }) as MultiInputFieldSlotTextFieldProps;
+  const fieldResponse = useMultiInputRangeField({
+    manager,
+    internalProps,
+    startTextFieldProps,
+    endTextFieldProps,
+    rootProps: {
+      spacing: 2,
+      direction: 'row' as const,
+      overflow: 'auto',
+      ...otherForwardedProps,
+    },
+  });
 
-    const fieldResponse = useMultiInputRangeField({
-      manager,
-      internalProps,
-      startTextFieldProps,
-      endTextFieldProps,
-      rootProps: {
-        spacing: 2,
-        direction: 'row' as const,
-        overflow: 'auto',
-        ...otherForwardedProps,
-        ref,
-      },
-    });
-
-    return (
-      <Stack {...fieldResponse.root}>
-        <BrowserTextField
-          {...(fieldResponse.startTextField as BrowserTextFieldProps)}
-        />
-        <span>–</span>
-        <BrowserTextField
-          {...(fieldResponse.endTextField as BrowserTextFieldProps)}
-        />
-      </Stack>
-    );
-  },
-) as BrowserMultiInputDateRangeFieldComponent;
-
-const BrowserDateRangePicker = React.forwardRef(
-  (props: DateRangePickerProps, ref: React.Ref<HTMLDivElement>) => {
-    return (
-      <DateRangePicker
-        ref={ref}
-        {...props}
-        slots={{ ...props.slots, field: BrowserMultiInputDateRangeField }}
+  return (
+    <Stack {...fieldResponse.root}>
+      <BrowserTextField
+        {...(fieldResponse.startTextField as BrowserTextFieldProps)}
       />
-    );
-  },
-);
+      <span>–</span>
+      <BrowserTextField {...(fieldResponse.endTextField as BrowserTextFieldProps)} />
+    </Stack>
+  );
+}
+
+function BrowserDateRangePicker(props: DateRangePickerProps) {
+  return (
+    <DateRangePicker
+      {...props}
+      slots={{ ...props.slots, field: BrowserMultiInputDateRangeField }}
+    />
+  );
+}
 
 export default function BrowserV7MultiInputRangeField() {
   return (
