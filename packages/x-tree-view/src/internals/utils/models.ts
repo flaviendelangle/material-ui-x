@@ -32,7 +32,7 @@ function useAssertModelConsistencyOutsideOfProduction<T>(parameters: {
     warnOnce(
       [
         `MUI X: A component is changing the default ${state} state of an uncontrolled Tree View after being initialized. ` +
-          `To suppress this warning opt to use a controlled Chart.`,
+          `To suppress this warning opt to use a controlled Tree View.`,
       ],
       'error',
     );
