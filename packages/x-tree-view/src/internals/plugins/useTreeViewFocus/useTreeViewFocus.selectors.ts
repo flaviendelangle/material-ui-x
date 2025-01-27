@@ -42,7 +42,7 @@ export const selectorDefaultFocusableItemId = createSelector(
     }
 
     const firstNavigableItem = orderedRootItemIds.find(
-      (itemId) => !disabledItemsFocusable || !isItemDisabled(itemMetaLookup, itemId),
+      (itemId) => disabledItemsFocusable || !isItemDisabled(itemMetaLookup, itemId),
     );
 
     if (firstNavigableItem != null) {
