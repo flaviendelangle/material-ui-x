@@ -90,8 +90,6 @@ function JoyMultiInputDateRangeField(props) {
     ownerState: { position: 'end' },
   });
 
-  console.log(endTextFieldProps);
-
   const fieldResponse = useMultiInputRangeField({
     manager,
     internalProps: { ...internalProps, enableAccessibleFieldDOMStructure: false },
