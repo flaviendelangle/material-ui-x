@@ -19,6 +19,7 @@ import type {
 import {
   UsePickerViewsActionsContextValue,
   UsePickerViewsContextValue,
+  UsePickerViewsPrivateContextValue,
 } from '../hooks/usePicker/usePickerViews';
 import { IsValidValueContext } from '../../hooks/useIsValidValue';
 import {
@@ -43,6 +44,8 @@ export const PickerPrivateContext = React.createContext<PickerPrivateContextValu
     pickerOrientation: 'portrait',
   },
   dismissViews: () => {},
+  hasUIView: true,
+  doesTheCurrentViewHasAnUI: () => true,
 });
 
 /**
@@ -97,44 +100,43 @@ export interface PickerContextValue<
 > extends UsePickerValueContextValue<TValue, TError>,
     UsePickerViewsContextValue<TView> {
   /**
-   * `true` if the picker is disabled, `false` otherwise.
+   * Whether the picker is disabled.
    */
   disabled: boolean;
   /**
-   * `true` if the picker is read-only, `false` otherwise.
+   * Whether the picker is read-only.
    */
   readOnly: boolean;
   /**
-   * `true` if the picker should be focused on mount.
+   * Whether the picker should be focused on mount.
    * If the picker has a field and is not open, the field should be focused.
    * If the picker does not have a field (if it is a static picker) or is not open, the view should be focused.
    */
   autoFocus: boolean;
   /**
    * The responsive variant of the picker.
-   * Is equal to "desktop" when using a desktop picker (like <DesktopDatePicker />).
-   * Is equal to "mobile" when using a mobile picker (like <MobileDatePicker />).
-   * Is equal to "mobile" or "desktop" when using a responsive picker (like <DatePicker />) depending on the `desktopModeMediaQuery` prop.
-   * Is equal to "mobile" or "desktop" when using a static picker (like <StaticDatePicker />) depending on the `displayStaticWrapperAs` prop.
-   * Is always equal to "desktop" if the component you are accessing the context from is not wrapped by a picker.
+   * It is equal to "desktop" when using a desktop picker (like <DesktopDatePicker />).
+   * It is equal to "mobile" when using a mobile picker (like <MobileDatePicker />).
+   * It is equal to "mobile" or "desktop" when using a responsive picker (like <DatePicker />) depending on the `desktopModeMediaQuery` prop.
+   * It is equal to "mobile" or "desktop" when using a static picker (like <StaticDatePicker />) depending on the `displayStaticWrapperAs` prop.
+   * It is always equal to "desktop" if the component you are accessing the context from is not wrapped by a picker.
    */
   variant: PickerVariant;
   /**
    * The orientation of the picker.
-   * Is equal to "landscape" when the picker is in landscape orientation.
-   * Is equal to "portrait" when the picker is in portrait orientation.
-   * You can use the "orientation" on any picker component to force the orientation.
-   * Is always equal to "portrait" if the component you are accessing the context from is not wrapped by a picker.
+   * On Time Pickers and Date Time Pickers, it is always equal to "portrait".
+   * On Date Pickers, it is equal to the picker `orientation` prop if defined, otherwise it is based on the current orientation of the user's screen.
+   * It is always equal to "portrait" if the component you are accessing the context from is not wrapped by a picker.
    */
   orientation: PickerOrientation;
   /**
-   * The ref that should be attached to the element that outermost element of the popup that contain the view if any.
-   * When using a built-in field component, this property is automatically handled.
+   * Whether the heavy animations should be disabled.
+   * @default `@media(prefers-reduced-motion: reduce)` || `navigator.userAgent` matches Android <10 or iOS <13
    */
-  popupRef: React.RefObject<any>;
+  reduceAnimations?: boolean;
   /**
-   * The ref that should be attached to the element that triggers the Picker opening.
-   * When using a built-in field component, this property is automatically handled.
+   * The ref to attach to the element that triggers the Picker opening.
+   * When using a built-in field component, this property is automatically attached to the right element.
    */
   triggerRef: React.RefObject<any>;
   /**
@@ -145,11 +147,16 @@ export interface PickerContextValue<
    */
   triggerStatus: 'hidden' | 'disabled' | 'enabled';
   /**
-   * Format that should be used to render the value in the field.
-   * Is equal to `props.format` on the picker component if defined.
-   * Is generated based on the available views if not defined.
-   * Is equal to an empty string if the picker does not have a field (static pickers).
-   * Is always equal to an empty string if the component you are accessing the context from is not wrapped by a picker.
+   * The ref to attach to the outermost element of the popup that contain the view if any.
+   * When using a built-in popup component, this property is automatically attached to the right element.
+   */
+  popupRef: React.RefObject<any>;
+  /**
+   * The format to use when rendering the value in the field.
+   * It is equal to the picker `format` prop if defined.
+   * It is generated based on the available views if not defined.
+   * It is always equal to an empty string if the picker does not have a field (static pickers).
+   * It is always equal to an empty string if the component you are accessing the context from is not wrapped by a picker.
    */
   fieldFormat: string;
   /**
@@ -195,7 +202,9 @@ export interface PickerActionsContextValue<
 > extends UsePickerValueActionsContextValue<TValue, TError>,
     UsePickerViewsActionsContextValue<TView> {}
 
-export interface PickerPrivateContextValue extends UsePickerValuePrivateContextValue {
+export interface PickerPrivateContextValue
+  extends UsePickerValuePrivateContextValue,
+    UsePickerViewsPrivateContextValue {
   /**
    * The ownerState of the picker.
    */

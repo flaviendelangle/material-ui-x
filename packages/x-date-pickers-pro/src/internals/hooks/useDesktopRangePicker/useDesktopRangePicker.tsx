@@ -4,7 +4,7 @@ import { useLicenseVerifier } from '@mui/x-license';
 import { PickersLayout } from '@mui/x-date-pickers/PickersLayout';
 import {
   usePicker,
-  PickersPopper,
+  PickerPopper,
   DateOrTimeViewWithMeridiem,
   PickerProvider,
   PickerRangeValue,
@@ -35,12 +35,12 @@ export const useDesktopRangePicker = <
 }: UseDesktopRangePickerParams<TView, TEnableAccessibleFieldDOMStructure, TExternalProps>) => {
   useLicenseVerifier('x-date-pickers-pro', releaseInfo);
 
-  const { slots, slotProps, inputRef, localeText, reduceAnimations } = props;
+  const { slots, slotProps, inputRef, localeText } = props;
 
   const fieldType = (slots.field as any).fieldType ?? 'single-input';
   const rangePositionResponse = useRangePosition(props);
 
-  const { providerProps, renderCurrentView, shouldRestoreFocus, ownerState } = usePicker<
+  const { providerProps, renderCurrentView, ownerState } = usePicker<
     PickerRangeValue,
     TView,
     TExternalProps
@@ -67,19 +67,16 @@ export const useDesktopRangePicker = <
       <PickerFieldUIContextProvider slots={slots} slotProps={slotProps} inputRef={inputRef}>
         <PickerRangePositionContext.Provider value={rangePositionResponse}>
           <Field {...fieldProps} />
-          <PickersPopper
+          <PickerPopper
             role="tooltip"
-            anchorEl={providerProps.contextValue.triggerRef.current}
             // onBlur={handleBlur}
             slots={slots}
             slotProps={slotProps}
-            shouldRestoreFocus={shouldRestoreFocus}
-            reduceAnimations={reduceAnimations}
           >
             <Layout {...slotProps?.layout} slots={slots} slotProps={slotProps}>
               {renderCurrentView()}
             </Layout>
-          </PickersPopper>
+          </PickerPopper>
         </PickerRangePositionContext.Provider>
       </PickerFieldUIContextProvider>
     </PickerProvider>

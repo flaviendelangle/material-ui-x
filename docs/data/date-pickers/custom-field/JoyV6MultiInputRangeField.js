@@ -96,7 +96,7 @@ function JoyMultiInputDateRangeField(props) {
     manager,
     internalProps: { ...internalProps, enableAccessibleFieldDOMStructure: false },
     rootProps: {
-      ref,
+      ref: pickerContext.rootRef,
       spacing: 2,
       overflow: 'auto',
       direction: 'row',
