@@ -28,7 +28,7 @@ export const useDesktopPicker = <
   props,
   ...pickerParams
 }: UseDesktopPickerParams<TView, TEnableAccessibleFieldDOMStructure, TExternalProps>) => {
-  const { slots, slotProps: innerSlotProps, label, inputRef, localeText, reduceAnimations } = props;
+  const { slots, slotProps: innerSlotProps, label, inputRef, localeText } = props;
 
   const labelId = useId();
   const isToolbarHidden = innerSlotProps?.toolbar?.hidden ?? false;

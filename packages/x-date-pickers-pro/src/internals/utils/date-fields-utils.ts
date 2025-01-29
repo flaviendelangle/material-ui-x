@@ -25,7 +25,8 @@ export const removeLastSeparator = (dateSections: FieldRangeSection[]) =>
 
 export const getPopperRole = (
   field: React.ElementType & { fieldType?: 'single-input' | 'multi-input' },
+  variant: 'desktop' | 'mobile',
 ) => {
   const fieldType = field.fieldType ?? 'single-input';
-  return fieldType === 'single-input' ? 'dialog' : 'tooltip';
+  return fieldType === 'single-input' && variant === 'desktop' ? 'dialog' : 'tooltip';
 };

@@ -21,7 +21,7 @@ import { styled, useThemeProps } from '@mui/material/styles';
 import { TransitionProps as MuiTransitionProps } from '@mui/material/transitions';
 import { SlotComponentPropsFromProps } from '@mui/x-internals/types';
 import { getPickerPopperUtilityClass, PickerPopperClasses } from './pickerPopperClasses';
-import { getActiveElement } from '../../utils/utils';
+import { executeInTheNextEventLoopTick, getActiveElement } from '../../utils/utils';
 import { usePickerPrivateContext } from '../../hooks/usePickerPrivateContext';
 import { PickerOwnerState } from '../../../models';
 import { usePickerContext } from '../../../hooks';
@@ -87,7 +87,6 @@ export interface ExportedPickerPopperProps {
 export interface PickerPopperProps extends ExportedPickerPopperProps {
   role: 'tooltip' | 'dialog';
   children?: React.ReactNode;
-  onBlur?: () => void;
   slots?: PickerPopperSlots;
   slotProps?: PickerPopperSlotProps;
 }
@@ -333,7 +332,6 @@ export function PickerPopper(inProps: PickerPopperProps) {
   const props = useThemeProps({ props: inProps, name: 'MuiPickerPopper' });
   const {
     children,
-    onBlur,
     role,
     placement = 'bottom-start',
     slots,
@@ -341,7 +339,7 @@ export function PickerPopper(inProps: PickerPopperProps) {
     classes: classesProp,
   } = props;
 
-  const { open, triggerRef, popupRef, reduceAnimations } = usePickerContext();
+  const { open, triggerRef, popupRef, rootRef, reduceAnimations } = usePickerContext();
   const { dismissViews, doesTheCurrentViewHasAnUI } = usePickerPrivateContext();
 
   React.useEffect(() => {
@@ -380,9 +378,26 @@ export function PickerPopper(inProps: PickerPopperProps) {
     }
   }, [open, role, doesTheCurrentViewHasAnUI]);
 
+  const handleClickAway = useEventCallback(() => {
+    if (role === 'tooltip') {
+      executeInTheNextEventLoopTick(() => {
+        if (
+          rootRef.current?.contains(getActiveElement(document)) ||
+          popupRef.current?.contains(getActiveElement(document))
+        ) {
+          return;
+        }
+
+        dismissViews();
+      });
+    } else {
+      dismissViews();
+    }
+  });
+
   const [clickAwayRef, onPaperClick, onPaperTouchStart] = useClickAwayListener(
     open,
-    onBlur ?? dismissViews,
+    handleClickAway,
   );
   const paperRef = React.useRef<HTMLDivElement>(null);
   const handleRef = useForkRef(paperRef, popupRef);

@@ -38,7 +38,7 @@ export const useDesktopRangePicker = <
 
   const { slots, slotProps, inputRef, localeText } = props;
 
-  const popperRole = getPopperRole(slots.field);
+  const popperRole = getPopperRole(slots.field, 'desktop');
   const rangePositionResponse = useRangePosition(props);
 
   const { providerProps, renderCurrentView, ownerState } = usePicker<
@@ -68,12 +68,7 @@ export const useDesktopRangePicker = <
       <PickerFieldUIContextProvider slots={slots} slotProps={slotProps} inputRef={inputRef}>
         <PickerRangePositionContext.Provider value={rangePositionResponse}>
           <Field {...fieldProps} />
-          <PickerPopper
-            role={popperRole}
-            // onBlur={handleBlur}
-            slots={slots}
-            slotProps={slotProps}
-          >
+          <PickerPopper role={popperRole} slots={slots} slotProps={slotProps}>
             <Layout {...slotProps?.layout} slots={slots} slotProps={slotProps}>
               {renderCurrentView()}
             </Layout>
