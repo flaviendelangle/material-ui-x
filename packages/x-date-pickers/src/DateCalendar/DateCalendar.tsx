@@ -134,7 +134,7 @@ export const DateCalendar = React.forwardRef(function DateCalendar(
     minDate,
     maxDate,
     disableHighlightToday,
-    focusedView: inFocusedView,
+    focusedView: focusedViewProp,
     onFocusedViewChange,
     showDaysOutsideCurrentMonth,
     fixedWeekNumber,
@@ -169,16 +169,14 @@ export const DateCalendar = React.forwardRef(function DateCalendar(
       onChange: handleValueChange,
       onViewChange,
       autoFocus,
-      focusedView: inFocusedView,
+      focusedView: focusedViewProp,
       onFocusedViewChange,
     });
 
   const {
     referenceDate,
     calendarState,
-    changeFocusedDay,
-    changeMonth,
-    handleChangeMonth,
+    setVisibleDate,
     isDateDisabled,
     onMonthSwitchingAnimationEnd,
   } = useCalendarState({
@@ -211,7 +209,7 @@ export const DateCalendar = React.forwardRef(function DateCalendar(
       view,
       currentMonth: calendarState.currentMonth,
       onViewChange: setView,
-      onMonthChange: (newMonth, direction) => handleChangeMonth({ newMonth, direction }),
+      onMonthChange: (newMonth) => setVisibleDate(newMonth),
       minDate: minDateWithDisabled,
       maxDate: maxDateWithDisabled,
       disabled,
@@ -243,13 +241,11 @@ export const DateCalendar = React.forwardRef(function DateCalendar(
 
     if (closestEnabledDate) {
       setValueAndGoToNextView(closestEnabledDate, 'finish');
-      onMonthChange?.(startOfMonth);
+      setVisibleDate(closestEnabledDate, true);
     } else {
       goToNextView();
-      changeMonth(startOfMonth);
+      setVisibleDate(startOfMonth, true);
     }
-
-    changeFocusedDay(closestEnabledDate, true);
   });
 
   const handleDateYearChange = useEventCallback((newDate: PickerValidDate) => {
@@ -271,13 +267,11 @@ export const DateCalendar = React.forwardRef(function DateCalendar(
 
     if (closestEnabledDate) {
       setValueAndGoToNextView(closestEnabledDate, 'finish');
-      onYearChange?.(closestEnabledDate);
+      setVisibleDate(closestEnabledDate, true);
     } else {
       goToNextView();
-      changeMonth(startOfYear);
+      setVisibleDate(startOfYear, true);
     }
-
-    changeFocusedDay(closestEnabledDate, true);
   });
 
   const handleSelectedDayChange = useEventCallback((day: PickerValidDate | null) => {
@@ -295,7 +289,7 @@ export const DateCalendar = React.forwardRef(function DateCalendar(
 
   React.useEffect(() => {
     if (utils.isValid(value)) {
-      changeMonth(value);
+      setVisibleDate(value);
     }
   }, [value]); // eslint-disable-line
 
@@ -385,7 +379,7 @@ export const DateCalendar = React.forwardRef(function DateCalendar(
               {...baseDateValidationProps}
               {...commonViewProps}
               onMonthSwitchingAnimationEnd={onMonthSwitchingAnimationEnd}
-              onFocusedDayChange={changeFocusedDay}
+              onFocusedDayChange={(focusedDay) => setVisibleDate(focusedDay)}
               reduceAnimations={reduceAnimations}
               selectedDays={selectedDays}
               onSelectedDaysChange={handleSelectedDayChange}
