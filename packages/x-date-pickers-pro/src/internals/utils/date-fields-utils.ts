@@ -22,3 +22,10 @@ export const removeLastSeparator = (dateSections: FieldRangeSection[]) =>
 
     return section;
   });
+
+export const getPopperRole = (
+  field: React.ElementType & { fieldType?: 'single-input' | 'multi-input' },
+) => {
+  const fieldType = field.fieldType ?? 'single-input';
+  return fieldType === 'single-input' ? 'dialog' : 'tooltip';
+};
