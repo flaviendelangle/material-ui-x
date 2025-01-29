@@ -31,7 +31,7 @@ interface SetVisibleDatePayload {
 }
 
 const createCalendarStateReducer =
-  (reduceAnimations: boolean, calendars: number, utils: MuiPickersAdapter) =>
+  (reduceAnimations: boolean, utils: MuiPickersAdapter) =>
   (
     state: CalendarState,
     action:
@@ -93,7 +93,6 @@ interface UseCalendarStateParameters
     | 'autoFocus'
   > {
   value: PickerValidDate | null;
-  calendars?: number;
   timezone: PickersTimezone;
 }
 
@@ -113,7 +112,6 @@ export const useCalendarState = (
     referenceDate: referenceDateProp,
     disableFuture,
     disablePast,
-    calendars = 1,
     maxDate,
     minDate,
     onMonthChange,
@@ -127,7 +125,7 @@ export const useCalendarState = (
   const utils = useUtils();
 
   const reducerFn = React.useRef(
-    createCalendarStateReducer(Boolean(reduceAnimations), calendars, utils),
+    createCalendarStateReducer(Boolean(reduceAnimations), utils),
   ).current;
 
   const referenceDate = React.useMemo<PickerValidDate>(
