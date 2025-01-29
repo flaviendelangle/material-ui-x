@@ -209,7 +209,7 @@ export const DateCalendar = React.forwardRef(function DateCalendar(
       view,
       currentMonth: calendarState.currentMonth,
       onViewChange: setView,
-      onMonthChange: (newMonth) => setVisibleDate(newMonth),
+      onMonthChange: setVisibleDate,
       minDate: minDateWithDisabled,
       maxDate: maxDateWithDisabled,
       disabled,
@@ -379,7 +379,7 @@ export const DateCalendar = React.forwardRef(function DateCalendar(
               {...baseDateValidationProps}
               {...commonViewProps}
               onMonthSwitchingAnimationEnd={onMonthSwitchingAnimationEnd}
-              onFocusedDayChange={(focusedDay) => setVisibleDate(focusedDay)}
+              onFocusedDayChange={setVisibleDate}
               reduceAnimations={reduceAnimations}
               selectedDays={selectedDays}
               onSelectedDaysChange={handleSelectedDayChange}
