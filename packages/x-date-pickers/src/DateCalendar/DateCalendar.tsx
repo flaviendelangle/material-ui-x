@@ -395,7 +395,6 @@ export const DateCalendar = React.forwardRef(function DateCalendar(
               shouldDisableDate={shouldDisableDate}
               shouldDisableMonth={shouldDisableMonth}
               shouldDisableYear={shouldDisableYear}
-              focusableDay={calendarState.focusedDay ?? referenceDate}
               onFocusedViewChange={(isViewFocused) => setFocusedView('day', isViewFocused)}
               showDaysOutsideCurrentMonth={showDaysOutsideCurrentMonth}
               fixedWeekNumber={fixedWeekNumber}
