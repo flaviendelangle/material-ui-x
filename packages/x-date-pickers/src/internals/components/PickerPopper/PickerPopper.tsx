@@ -85,7 +85,6 @@ export interface ExportedPickerPopperProps {
 }
 
 export interface PickerPopperProps extends ExportedPickerPopperProps {
-  role: 'tooltip' | 'dialog';
   children?: React.ReactNode;
   slots?: PickerPopperSlots;
   slotProps?: PickerPopperSlotProps;
@@ -330,17 +329,10 @@ const PickerPopperPaperWrapper = React.forwardRef(
 
 export function PickerPopper(inProps: PickerPopperProps) {
   const props = useThemeProps({ props: inProps, name: 'MuiPickerPopper' });
-  const {
-    children,
-    role,
-    placement = 'bottom-start',
-    slots,
-    slotProps,
-    classes: classesProp,
-  } = props;
+  const { children, placement = 'bottom-start', slots, slotProps, classes: classesProp } = props;
 
   const { open, triggerRef, popupRef, rootRef, reduceAnimations } = usePickerContext();
-  const { dismissViews, doesTheCurrentViewHasAnUI } = usePickerPrivateContext();
+  const { dismissViews, doesTheCurrentViewHasAnUI, viewContainerRole } = usePickerPrivateContext();
 
   React.useEffect(() => {
     function handleKeyDown(nativeEvent: KeyboardEvent) {
@@ -358,7 +350,7 @@ export function PickerPopper(inProps: PickerPopperProps) {
 
   const lastFocusedElementRef = React.useRef<Element | null>(null);
   React.useEffect(() => {
-    if (role === 'tooltip' || !doesTheCurrentViewHasAnUI()) {
+    if (viewContainerRole === 'tooltip' || !doesTheCurrentViewHasAnUI()) {
       return;
     }
 
@@ -376,10 +368,10 @@ export function PickerPopper(inProps: PickerPopperProps) {
         }
       });
     }
-  }, [open, role, doesTheCurrentViewHasAnUI]);
+  }, [open, viewContainerRole, doesTheCurrentViewHasAnUI]);
 
   const handleClickAway = useEventCallback(() => {
-    if (role === 'tooltip') {
+    if (viewContainerRole === 'tooltip') {
       executeInTheNextEventLoopTick(() => {
         if (
           rootRef.current?.contains(getActiveElement(document)) ||
@@ -428,7 +420,7 @@ export function PickerPopper(inProps: PickerPopperProps) {
     externalSlotProps: slotProps?.popper,
     additionalProps: {
       transition: true,
-      role,
+      role: viewContainerRole,
       open,
       placement,
       anchorEl: triggerRef.current,
@@ -448,7 +440,7 @@ export function PickerPopper(inProps: PickerPopperProps) {
           // without this prop the focus is returned to the button before `aria-label` is updated
           // which would force screen readers to read too old label
           disableRestoreFocus
-          disableEnforceFocus={role === 'tooltip'}
+          disableEnforceFocus={viewContainerRole === 'tooltip'}
           isEnabled={() => true}
           {...slotProps?.desktopTrapFocus}
         >

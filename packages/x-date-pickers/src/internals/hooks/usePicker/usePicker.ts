@@ -17,6 +17,7 @@ export const usePicker = <
   variant,
   validator,
   autoFocusView,
+  viewContainerRole,
   rendererInterceptor,
   localeText,
 }: UsePickerParams<TValue, TView, TExternalProps>): UsePickerReturnValue<TValue> => {
@@ -49,6 +50,7 @@ export const usePicker = <
     localeText,
     valueManager,
     variant,
+    viewContainerRole,
     paramsFromUsePickerValue: pickerValueResponse.provider,
     paramsFromUsePickerViews: pickerViewsResponse.provider,
   });

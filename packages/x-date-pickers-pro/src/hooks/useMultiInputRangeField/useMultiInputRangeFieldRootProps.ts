@@ -1,5 +1,3 @@
-import * as React from 'react';
-import useForkRef from '@mui/utils/useForkRef';
 import useEventCallback from '@mui/utils/useEventCallback';
 import {
   executeInTheNextEventLoopTick,
@@ -16,17 +14,15 @@ export function useMultiInputRangeFieldRootProps<TForwardedProps extends { [key:
 ): UseMultiInputRangeFieldRootPropsReturnValue<TForwardedProps> {
   const pickerContext = useNullablePickerContext();
   const privatePickerContext = usePickerPrivateContext();
-  const ref = React.useRef<HTMLElement>(null);
-  const handleRef = useForkRef(forwardedProps.ref, ref);
 
   const handleBlur = useEventCallback(() => {
-    if (!pickerContext || pickerContext.variant === 'mobile') {
+    if (!pickerContext || privatePickerContext.viewContainerRole !== 'tooltip') {
       return;
     }
 
     executeInTheNextEventLoopTick(() => {
       if (
-        ref.current?.contains(getActiveElement(document)) ||
+        privatePickerContext.rootRefObject.current?.contains(getActiveElement(document)) ||
         pickerContext.popupRef.current?.contains(getActiveElement(document))
       ) {
         return;
@@ -36,12 +32,11 @@ export function useMultiInputRangeFieldRootProps<TForwardedProps extends { [key:
     });
   });
 
-  return { ...forwardedProps, onBlur: handleBlur, ref: handleRef };
+  return { ...forwardedProps, onBlur: handleBlur };
 }
 
 export type UseMultiInputRangeFieldRootPropsReturnValue<
   TForwardedProps extends { [key: string]: any },
-> = Omit<TForwardedProps, 'onBlur' | 'ref'> & {
+> = Omit<TForwardedProps, 'onBlur'> & {
   onBlur: () => void;
-  ref: React.Ref<HTMLDivElement>;
 };

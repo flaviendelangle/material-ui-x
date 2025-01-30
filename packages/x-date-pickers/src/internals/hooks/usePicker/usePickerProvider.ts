@@ -1,5 +1,6 @@
 import * as React from 'react';
 import useEnhancedEffect from '@mui/utils/useEnhancedEffect';
+import useForkRef from '@mui/utils/useForkRef';
 import { PickerOwnerState } from '../../../models';
 import { PickerValueManager, UsePickerValueProviderParams } from './usePickerValue.types';
 import {
@@ -77,6 +78,7 @@ export function usePickerProvider<
     valueManager,
     localeText,
     variant,
+    viewContainerRole,
     paramsFromUsePickerValue,
     paramsFromUsePickerViews,
   } = parameters;
@@ -87,6 +89,8 @@ export function usePickerProvider<
 
   const triggerRef = React.useRef<HTMLElement>(null);
   const popupRef = React.useRef<HTMLElement>(null);
+  const rootRefObject = React.useRef<HTMLDivElement>(null);
+  const rootRef = useForkRef(ref, rootRefObject);
 
   const ownerState = React.useMemo<PickerOwnerState>(
     () => ({
@@ -142,13 +146,13 @@ export function usePickerProvider<
       name: props.name,
       label: props.label,
       rootSx: props.sx,
-      rootRef: ref,
+      rootRef,
       rootClassName: props.className,
     }),
     [
       paramsFromUsePickerValue.contextValue,
       paramsFromUsePickerViews.contextValue,
-      ref,
+      rootRef,
       variant,
       orientation,
       reduceAnimations,
@@ -170,11 +174,14 @@ export function usePickerProvider<
       ...paramsFromUsePickerValue.privateContextValue,
       ...paramsFromUsePickerViews.privateContextValue,
       ownerState,
+      rootRefObject,
+      viewContainerRole,
     }),
     [
       paramsFromUsePickerValue.privateContextValue,
       paramsFromUsePickerViews.privateContextValue,
       ownerState,
+      viewContainerRole,
     ],
   );
 
@@ -222,6 +229,7 @@ export interface UsePickerProviderParameters<
   props: UsePickerProps<TValue, any, any, any> & UsePickerProviderNonStaticProps;
   valueManager: PickerValueManager<TValue, any>;
   variant: PickerVariant;
+  viewContainerRole: 'dialog' | 'tooltip' | undefined;
   paramsFromUsePickerValue: UsePickerValueProviderParams<TValue, TError>;
   paramsFromUsePickerViews: UsePickerViewsProviderParams<TView>;
 }

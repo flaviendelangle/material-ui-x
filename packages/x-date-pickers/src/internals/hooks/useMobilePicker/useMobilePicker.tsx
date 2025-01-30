@@ -42,6 +42,7 @@ export const useMobilePicker = <
     props,
     localeText,
     autoFocusView: true,
+    viewContainerRole: 'dialog',
     variant: 'mobile',
   });
 

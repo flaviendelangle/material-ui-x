@@ -42,6 +42,7 @@ export const useDesktopPicker = <
     props,
     localeText,
     autoFocusView: true,
+    viewContainerRole: 'dialog',
     variant: 'desktop',
   });
 

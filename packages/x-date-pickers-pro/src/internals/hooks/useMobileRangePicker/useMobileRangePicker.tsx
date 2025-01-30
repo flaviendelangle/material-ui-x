@@ -54,6 +54,7 @@ export const useMobileRangePicker = <
     props,
     variant: 'mobile',
     autoFocusView: true,
+    viewContainerRole: 'dialog',
     localeText,
   });
 

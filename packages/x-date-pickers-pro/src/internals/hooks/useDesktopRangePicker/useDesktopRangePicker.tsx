@@ -17,7 +17,7 @@ import {
 import { getReleaseInfo } from '../../utils/releaseInfo';
 import { useRangePosition } from '../useRangePosition';
 import { PickerRangePositionContext } from '../../../hooks/usePickerRangePositionContext';
-import { getPopperRole } from '../../utils/date-fields-utils';
+import { getViewContainerRoleForRangePicker } from '../../utils/date-fields-utils';
 
 const releaseInfo = getReleaseInfo();
 
@@ -38,7 +38,7 @@ export const useDesktopRangePicker = <
 
   const { slots, slotProps, inputRef, localeText } = props;
 
-  const popperRole = getPopperRole(slots.field, 'desktop');
+  const viewContainerRole = getViewContainerRoleForRangePicker(slots.field, 'desktop');
   const rangePositionResponse = useRangePosition(props);
 
   const { providerProps, renderCurrentView, ownerState } = usePicker<
@@ -49,7 +49,8 @@ export const useDesktopRangePicker = <
     ...pickerParams,
     props,
     variant: 'desktop',
-    autoFocusView: popperRole === 'dialog',
+    autoFocusView: viewContainerRole === 'dialog',
+    viewContainerRole,
     localeText,
   });
 
@@ -68,7 +69,7 @@ export const useDesktopRangePicker = <
       <PickerFieldUIContextProvider slots={slots} slotProps={slotProps} inputRef={inputRef}>
         <PickerRangePositionContext.Provider value={rangePositionResponse}>
           <Field {...fieldProps} />
-          <PickerPopper role={popperRole} slots={slots} slotProps={slotProps}>
+          <PickerPopper slots={slots} slotProps={slotProps}>
             <Layout {...slotProps?.layout} slots={slots} slotProps={slotProps}>
               {renderCurrentView()}
             </Layout>
