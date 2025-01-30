@@ -216,7 +216,7 @@ export const DateCalendar = React.forwardRef(function DateCalendar(
       view,
       currentMonth: calendarState.currentMonth,
       onViewChange: setView,
-      onMonthChange: setVisibleDate,
+      onMonthChange: (month) => setVisibleDate({ target: month, reason: 'header-navigation' }),
       minDate: minDateWithDisabled,
       maxDate: maxDateWithDisabled,
       disabled,
@@ -248,10 +248,10 @@ export const DateCalendar = React.forwardRef(function DateCalendar(
 
     if (closestEnabledDate) {
       setValueAndGoToNextView(closestEnabledDate, 'finish');
-      setVisibleDate(closestEnabledDate, true);
+      setVisibleDate({ target: closestEnabledDate, reason: 'cell-interaction' });
     } else {
       goToNextView();
-      setVisibleDate(startOfMonth, true);
+      setVisibleDate({ target: startOfMonth, reason: 'cell-interaction' });
     }
   });
 
@@ -274,10 +274,10 @@ export const DateCalendar = React.forwardRef(function DateCalendar(
 
     if (closestEnabledDate) {
       setValueAndGoToNextView(closestEnabledDate, 'finish');
-      setVisibleDate(closestEnabledDate, true);
+      setVisibleDate({ target: closestEnabledDate, reason: 'cell-interaction' });
     } else {
       goToNextView();
-      setVisibleDate(startOfYear, true);
+      setVisibleDate({ target: startOfYear, reason: 'cell-interaction' });
     }
   });
 
@@ -296,7 +296,7 @@ export const DateCalendar = React.forwardRef(function DateCalendar(
 
   React.useEffect(() => {
     if (utils.isValid(value)) {
-      setVisibleDate(value);
+      setVisibleDate({ target: value, reason: 'controlled-value-change' });
     }
   }, [value]); // eslint-disable-line
 
@@ -386,7 +386,9 @@ export const DateCalendar = React.forwardRef(function DateCalendar(
               {...baseDateValidationProps}
               {...commonViewProps}
               onMonthSwitchingAnimationEnd={onMonthSwitchingAnimationEnd}
-              onFocusedDayChange={setVisibleDate}
+              onFocusedDayChange={(focusedDate) =>
+                setVisibleDate({ target: focusedDate, reason: 'cell-interaction' })
+              }
               reduceAnimations={reduceAnimations}
               selectedDays={selectedDays}
               onSelectedDaysChange={handleSelectedDayChange}

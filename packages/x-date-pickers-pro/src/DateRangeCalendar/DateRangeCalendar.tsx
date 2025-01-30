@@ -390,7 +390,7 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
         views: ['day'],
         view: 'day',
         currentMonth: calendarState.currentMonth,
-        onMonthChange: (newMonth) => setVisibleDate(newMonth),
+        onMonthChange: (month) => setVisibleDate({ target: month, reason: 'header-navigation' }),
         minDate,
         maxDate,
         disabled,
@@ -404,6 +404,7 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
       ownerState,
     });
 
+  // TODO: Move this logic inside the render instead of using an effect
   const prevValue = React.useRef<PickerRangeValue | null>(null);
   React.useEffect(() => {
     const date = rangePosition === 'start' ? value[0] : value[1];
@@ -435,7 +436,7 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
           : // If need to focus end, scroll to the state when "end" is displaying in the last calendar
             utils.addMonths(date, -displayingMonthRange);
 
-      setVisibleDate(newMonth);
+      setVisibleDate({ target: newMonth, reason: 'controlled-value-change' });
     }
   }, [rangePosition, value]); // eslint-disable-line
 
@@ -577,7 +578,9 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
               {...baseDateValidationProps}
               {...commonViewProps}
               onMonthSwitchingAnimationEnd={onMonthSwitchingAnimationEnd}
-              onFocusedDayChange={setVisibleDate}
+              onFocusedDayChange={(focusedDate) =>
+                setVisibleDate({ target: focusedDate, reason: 'cell-interaction' })
+              }
               reduceAnimations={reduceAnimations}
               selectedDays={value}
               onSelectedDaysChange={handleSelectedDayChange}
