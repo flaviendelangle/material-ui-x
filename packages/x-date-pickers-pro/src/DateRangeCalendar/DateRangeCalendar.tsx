@@ -175,7 +175,7 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
   const {
     value: valueProp,
     defaultValue,
-    referenceDate: referenceDateProp,
+    referenceDate,
     onChange,
     className,
     classes: classesProp,
@@ -225,7 +225,7 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
     name: 'DateRangeCalendar',
     timezone: timezoneProp,
     value: valueProp,
-    referenceDate: referenceDateProp,
+    referenceDate,
     defaultValue,
     onChange,
     valueManager: rangeValueManager,
@@ -270,7 +270,7 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
         rangePosition,
         allowRangeFlip,
         shouldMergeDateAndTime: true,
-        referenceDate: referenceDateProp,
+        referenceDate,
       });
 
       const isNextSectionAvailable = availableRangePositions.includes(nextSelection);
@@ -346,7 +346,7 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
 
   const { calendarState, setVisibleDate, onMonthSwitchingAnimationEnd } = useCalendarState({
     value: value[0] || value[1],
-    referenceDate: referenceDateProp,
+    referenceDate,
     disableFuture,
     disablePast,
     maxDate,
