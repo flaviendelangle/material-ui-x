@@ -190,7 +190,6 @@ export const DateCalendar = React.forwardRef(function DateCalendar(
     disablePast,
     disableFuture,
     timezone,
-    autoFocus,
     getCurrentMonthFromVisibleDate: (visibleDate, prevMonth) => {
       if (utils.isSameMonth(visibleDate, prevMonth)) {
         return prevMonth;

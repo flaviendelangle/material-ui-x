@@ -355,7 +355,6 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
     reduceAnimations,
     shouldDisableDate: wrappedShouldDisableDate,
     timezone,
-    autoFocus,
     getCurrentMonthFromVisibleDate: (visibleDate, prevMonth) => {
       const firstVisibleMonth = utils.addMonths(prevMonth, 1 - currentMonthCalendarPosition);
       const lastVisibleMonth = utils.endOfMonth(utils.addMonths(firstVisibleMonth, calendars - 1));

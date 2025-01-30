@@ -90,7 +90,6 @@ interface UseCalendarStateParameters
     | 'onYearChange'
     | 'reduceAnimations'
     | 'shouldDisableDate'
-    | 'autoFocus'
   > {
   value: PickerValidDate | null;
   timezone: PickersTimezone;
@@ -123,7 +122,6 @@ export const useCalendarState = (
     reduceAnimations,
     shouldDisableDate,
     timezone,
-    autoFocus,
     getCurrentMonthFromVisibleDate,
   } = params;
 
@@ -151,7 +149,7 @@ export const useCalendarState = (
 
   const [calendarState, dispatch] = React.useReducer(reducerFn, {
     isMonthSwitchingAnimating: false,
-    focusedDay: autoFocus ? referenceDate : null,
+    focusedDay: referenceDate,
     currentMonth: utils.startOfMonth(referenceDate),
     slideDirection: 'left',
   });
