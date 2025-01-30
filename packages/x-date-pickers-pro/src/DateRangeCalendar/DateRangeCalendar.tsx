@@ -231,7 +231,7 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
     valueManager: rangeValueManager,
   });
 
-  const { view, setFocusedView, setValueAndGoToNextView } = useViews({
+  const { view, focusedView, setFocusedView, setValueAndGoToNextView } = useViews({
     view: inView,
     views,
     openTo,
@@ -587,7 +587,7 @@ const DateRangeCalendar = React.forwardRef(function DateRangeCalendar(
               currentMonth={month}
               TransitionProps={CalendarTransitionProps}
               shouldDisableDate={wrappedShouldDisableDate}
-              hasFocus
+              hasFocus={focusedView === 'day'}
               onFocusedViewChange={(isViewFocused) => setFocusedView('day', isViewFocused)}
               showDaysOutsideCurrentMonth={calendars === 1 && showDaysOutsideCurrentMonth}
               dayOfWeekFormatter={dayOfWeekFormatter}

@@ -175,13 +175,11 @@ export function usePickerProvider<
       ...paramsFromUsePickerViews.privateContextValue,
       ownerState,
       rootRefObject,
-      viewContainerRole,
     }),
     [
       paramsFromUsePickerValue.privateContextValue,
       paramsFromUsePickerViews.privateContextValue,
       ownerState,
-      viewContainerRole,
     ],
   );
 
@@ -229,7 +227,6 @@ export interface UsePickerProviderParameters<
   props: UsePickerProps<TValue, any, any, any> & UsePickerProviderNonStaticProps;
   valueManager: PickerValueManager<TValue, any>;
   variant: PickerVariant;
-  viewContainerRole: 'dialog' | 'tooltip' | undefined;
   paramsFromUsePickerValue: UsePickerValueProviderParams<TValue, TError>;
   paramsFromUsePickerViews: UsePickerViewsProviderParams<TView>;
 }

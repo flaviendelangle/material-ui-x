@@ -40,6 +40,7 @@ export const usePicker = <
   const pickerViewsResponse = usePickerViews<TValue, TView, TExternalProps>({
     props,
     autoFocusView,
+    viewContainerRole,
     propsFromPickerValue: pickerValueResponse.viewProps,
     rendererInterceptor,
   });
@@ -50,7 +51,6 @@ export const usePicker = <
     localeText,
     valueManager,
     variant,
-    viewContainerRole,
     paramsFromUsePickerValue: pickerValueResponse.provider,
     paramsFromUsePickerViews: pickerViewsResponse.provider,
   });

@@ -47,11 +47,11 @@ export interface UsePickerParams<
     >,
     Pick<
       UsePickerViewParams<TValue, TView, TExternalProps>,
-      'autoFocusView' | 'rendererInterceptor'
+      'autoFocusView' | 'viewContainerRole' | 'rendererInterceptor'
     >,
     Pick<
       UsePickerProviderParameters<TValue, TView, InferError<TExternalProps>>,
-      'localeText' | 'variant' | 'viewContainerRole' | 'ref'
+      'localeText' | 'variant' | 'ref'
     > {
   props: TExternalProps;
 }
