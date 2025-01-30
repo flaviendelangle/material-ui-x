@@ -331,7 +331,7 @@ export function PickerPopper(inProps: PickerPopperProps) {
   const props = useThemeProps({ props: inProps, name: 'MuiPickerPopper' });
   const { children, placement = 'bottom-start', slots, slotProps, classes: classesProp } = props;
 
-  const { open, triggerRef, popupRef, rootRef, reduceAnimations } = usePickerContext();
+  const { open, triggerRef, popupRef, reduceAnimations } = usePickerContext();
   const { dismissViews, doesTheCurrentViewHasAnUI, viewContainerRole } = usePickerPrivateContext();
 
   React.useEffect(() => {
@@ -370,11 +370,18 @@ export function PickerPopper(inProps: PickerPopperProps) {
     }
   }, [open, viewContainerRole, doesTheCurrentViewHasAnUI]);
 
+  const classes = useUtilityClasses(classesProp);
+  const { ownerState: pickerOwnerState, rootRefObject } = usePickerPrivateContext();
+  const ownerState: PickerPopperOwnerState = {
+    ...pickerOwnerState,
+    popperPlacement: placement,
+  };
+
   const handleClickAway = useEventCallback(() => {
     if (viewContainerRole === 'tooltip') {
       executeInTheNextEventLoopTick(() => {
         if (
-          rootRef.current?.contains(getActiveElement(document)) ||
+          rootRefObject.current?.contains(getActiveElement(document)) ||
           popupRef.current?.contains(getActiveElement(document))
         ) {
           return;
@@ -394,13 +401,6 @@ export function PickerPopper(inProps: PickerPopperProps) {
   const paperRef = React.useRef<HTMLDivElement>(null);
   const handleRef = useForkRef(paperRef, popupRef);
   const handlePaperRef = useForkRef(handleRef, clickAwayRef as React.Ref<HTMLDivElement>);
-
-  const classes = useUtilityClasses(classesProp);
-  const { ownerState: pickerOwnerState } = usePickerPrivateContext();
-  const ownerState: PickerPopperOwnerState = {
-    ...pickerOwnerState,
-    popperPlacement: placement,
-  };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Escape') {

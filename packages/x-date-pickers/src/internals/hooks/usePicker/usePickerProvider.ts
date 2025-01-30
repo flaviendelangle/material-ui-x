@@ -78,7 +78,6 @@ export function usePickerProvider<
     valueManager,
     localeText,
     variant,
-    viewContainerRole,
     paramsFromUsePickerValue,
     paramsFromUsePickerViews,
   } = parameters;

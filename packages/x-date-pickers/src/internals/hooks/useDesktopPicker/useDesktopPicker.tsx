@@ -83,7 +83,7 @@ export const useDesktopPicker = <
     <PickerProvider {...providerProps}>
       <PickerFieldUIContextProvider slots={slots} slotProps={slotProps} inputRef={inputRef}>
         <Field {...fieldProps} />
-        <PickerPopper role="dialog" slots={slots} slotProps={slotProps}>
+        <PickerPopper slots={slots} slotProps={slotProps}>
           <Layout {...slotProps?.layout} slots={slots} slotProps={slotProps}>
             {renderCurrentView()}
           </Layout>
