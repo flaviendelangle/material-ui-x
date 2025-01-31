@@ -11,6 +11,7 @@ import {
   useControlledValueWithTimezone,
   useFieldInternalPropsWithDefaults,
   UseFieldResponse,
+  useNullablePickerContext,
 } from '@mui/x-date-pickers/internals';
 import { useValidation } from '@mui/x-date-pickers/validation';
 import { useMultiInputRangeFieldTextFieldProps } from './useMultiInputRangeFieldTextFieldProps';
@@ -158,6 +159,7 @@ export function useMultiInputRangeField<
       defaultValue: defaultValue === undefined ? undefined : defaultValue[0],
       onChange: handleStartDateChange,
       autoFocus,
+      // ...(pickerContext?.variant === 'mobile' && { readOnly: true }),
     },
   });
 
@@ -173,6 +175,7 @@ export function useMultiInputRangeField<
       defaultValue: defaultValue === undefined ? undefined : defaultValue[1],
       onChange: handleEndDateChange,
       autoFocus: false,
+      // ...(pickerContext?.variant === 'mobile' && { readOnly: true }),
     },
   });
 

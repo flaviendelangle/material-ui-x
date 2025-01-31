@@ -72,7 +72,11 @@ export function createMultiInputRangeField<TManager extends PickerAnyRangeManage
       enableAccessibleFieldDOMStructure: props.enableAccessibleFieldDOMStructure,
       dateSeparator: props.dateSeparator,
     });
-    const { internalProps, forwardedProps } = useSplitFieldProps(themeProps, manager.valueType);
+    const { internalProps: rawInternalProps, forwardedProps } = useSplitFieldProps(
+      themeProps,
+      manager.valueType,
+    );
+    const internalProps = { ...rawInternalProps, readOnly: true };
 
     const {
       slots,
