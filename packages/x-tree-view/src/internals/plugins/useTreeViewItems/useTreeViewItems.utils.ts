@@ -39,6 +39,10 @@ export const isItemDisabled = (
 
   while (itemMeta.parentId != null) {
     itemMeta = itemMetaLookup[itemMeta.parentId];
+    if (!itemMeta) {
+      return false;
+    }
+
     if (itemMeta.disabled) {
       return true;
     }
