@@ -1053,7 +1053,7 @@ async function initializeEnvironment(
         await renderFixture('DatePicker/SingleDesktopDateRangePickerWithTZ');
 
         // open the picker
-        await page.getByRole('group').click();
+        await page.getByRole('button').click();
 
         await page.getByRole('spinbutton', { name: 'Month' }).first().press('ArrowDown');
 
