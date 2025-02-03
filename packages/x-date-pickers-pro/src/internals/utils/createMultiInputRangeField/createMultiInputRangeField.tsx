@@ -68,6 +68,9 @@ export function createMultiInputRangeField<TManager extends PickerAnyRangeManage
       name,
     });
 
+    const pickerFieldUIContext = React.useContext(PickerFieldUIContext);
+    const pickerContext = useNullablePickerContext();
+
     const manager = useManager({
       enableAccessibleFieldDOMStructure: props.enableAccessibleFieldDOMStructure,
       dateSeparator: props.dateSeparator,
@@ -76,7 +79,10 @@ export function createMultiInputRangeField<TManager extends PickerAnyRangeManage
       themeProps,
       manager.valueType,
     );
-    const internalProps = { ...rawInternalProps, readOnly: true };
+    const internalProps =
+      pickerContext?.variant === 'mobile'
+        ? { ...rawInternalProps, readOnly: true }
+        : rawInternalProps;
 
     const {
       slots,
@@ -88,8 +94,6 @@ export function createMultiInputRangeField<TManager extends PickerAnyRangeManage
 
     const classes = useUtilityClasses(classesProp);
     const ownerState = useFieldOwnerState(internalProps as any);
-    const pickerFieldUIContext = React.useContext(PickerFieldUIContext);
-    const pickerContext = useNullablePickerContext();
     const handleRef = useForkRef(ref, pickerContext?.rootRef);
 
     const Root = slots?.root ?? MultiInputRangeFieldRoot;

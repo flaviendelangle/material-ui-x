@@ -158,7 +158,6 @@ export function useMultiInputRangeField<
       defaultValue: defaultValue === undefined ? undefined : defaultValue[0],
       onChange: handleStartDateChange,
       autoFocus,
-      // ...(pickerContext?.variant === 'mobile' && { readOnly: true }),
     },
   });
 
@@ -174,7 +173,6 @@ export function useMultiInputRangeField<
       defaultValue: defaultValue === undefined ? undefined : defaultValue[1],
       onChange: handleEndDateChange,
       autoFocus: false,
-      // ...(pickerContext?.variant === 'mobile' && { readOnly: true }),
     },
   });
 
