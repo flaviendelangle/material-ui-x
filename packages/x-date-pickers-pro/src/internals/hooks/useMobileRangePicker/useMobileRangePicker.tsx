@@ -58,19 +58,20 @@ export const useMobileRangePicker = <
     localeText,
   });
 
+  const isToolbarHidden = innerSlotProps?.toolbar?.hidden ?? false;
+
   const Field = slots.field;
   const { ownerState: fieldOwnerState, ...fieldProps } = useSlotProps({
     elementType: Field,
     externalSlotProps: innerSlotProps?.field,
     additionalProps: {
-      ...(fieldType === 'single-input' && {
-        id: labelId,
-      }),
+      ...(fieldType === 'single-input' &&
+        isToolbarHidden && {
+          id: labelId,
+        }),
     },
     ownerState,
   });
-
-  const isToolbarHidden = innerSlotProps?.toolbar?.hidden ?? false;
 
   const Layout = slots?.layout ?? PickersLayout;
 
