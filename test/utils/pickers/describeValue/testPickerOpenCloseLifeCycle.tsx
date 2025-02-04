@@ -21,7 +21,8 @@ export const testPickerOpenCloseLifeCycle: DescribeValueTestSuite<PickerValidVal
     options;
 
   const isRangeType = pickerParams.type === 'date-range' || pickerParams.type === 'date-time-range';
-  const viewWrapperRole = isPickerSingleInput(options) ? 'dialog' : 'tooltip';
+  const viewWrapperRole =
+    isPickerSingleInput(options) || pickerParams.variant === 'mobile' ? 'dialog' : 'tooltip';
   const shouldCloseOnSelect =
     (pickerParams.type === 'date' || pickerParams.type === 'date-range') &&
     pickerParams.variant === 'desktop';
