@@ -23,10 +23,9 @@ export const removeLastSeparator = (dateSections: FieldRangeSection[]) =>
     return section;
   });
 
-export const getViewContainerRoleForRangePicker = (
+export function getRangeFieldType(
   field: React.ElementType & { fieldType?: 'single-input' | 'multi-input' },
-  variant: 'desktop' | 'mobile',
-) => {
+) {
   const fieldType = field.fieldType;
   if (!fieldType) {
     throw new Error(
@@ -38,5 +37,5 @@ export const getViewContainerRoleForRangePicker = (
     );
   }
 
-  return fieldType === 'single-input' && variant === 'desktop' ? 'dialog' : 'tooltip';
-};
+  return fieldType;
+}
