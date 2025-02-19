@@ -27,6 +27,16 @@ export const getViewContainerRoleForRangePicker = (
   field: React.ElementType & { fieldType?: 'single-input' | 'multi-input' },
   variant: 'desktop' | 'mobile',
 ) => {
-  const fieldType = field.fieldType ?? 'multi-input';
+  const fieldType = field.fieldType;
+  if (!fieldType) {
+    throw new Error(
+      [
+        'MUI X: The field component passed to a range picker must have a fieldType static property.',
+        'If your field contains a single input for both the start and the end date, set it to "single-input": MyField.fieldType = "single-input"',
+        'If your field contains one input for the start and another input for the end date, set it to "multi-input": MyField.fieldType = "multi-input"',
+      ].join('\n'),
+    );
+  }
+
   return fieldType === 'single-input' && variant === 'desktop' ? 'dialog' : 'tooltip';
 };
